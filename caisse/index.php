@@ -1,8 +1,11 @@
 <?php
 session_start();
-if (!isset($_SESSION['loggedin'])) { //if login in session is not set
-    header("Location: ../login/");
-}
+//if (!isset($_SESSION['loggedin'],$_SESSION['id_caisse'])) { //if login in session is not set
+//    $checkIDcaisse = $_SESSION['id_caisse'];
+//    $sql = "SELECT * FROM id_caisse_used "
+//
+//
+//}
 
 ?>
 <!DOCTYPE html>
@@ -292,7 +295,7 @@ overflow: hidden;">
                 <div class="row">
                     <div class="col-md-6">
                         <button type="button" class="btn btn-block btn-primary btn-lg btnCaisse" data-toggle="modal"
-                                data-target="#modal-remise" id="paiementEspece">
+                                data-target="#modal-remise" >
                             Remise
                         </button>
                     </div>
@@ -916,6 +919,26 @@ overflow: hidden;">
             }
         })
     }
+
+    function checkIfCaisseConnected() {
+        var id_caisse ='<?php echo isset($_SESSION["session"]) ? $_SESSION["id_caisse"] : 0 ?>'
+        $.ajax({
+            url: "../login/checkIfConnected.php",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({"id_caisse": id_caisse, "action": "check"}),
+            success: function (data) {
+                var result = JSON.parse(data)
+                // if (result.response === 0) {
+                //     Toast.fire({
+                //         icon: 'error',
+                //         title: result.message
+                //     })
+                // }
+            }
+        })
+    }
+    $(document).ready(checkIfCaisseConnected); // Call on page load
 
     $("input[type=text][name=quantiteProduit]").on("keypress", function (e) {
         if (e.which == 13) {

@@ -13,6 +13,7 @@ $('#modal-cheque').on('shown.bs.modal', function() {
 
 
 
+
 function getTotal() {
     var total = $('#total').text()
     total = total.replace(/\s/g, '');

@@ -2,7 +2,8 @@
 include('../DBConfig.php');
 session_start();
 if (!isset($_SESSION['loggedin']) or $_SESSION['role'] == "caisse") { //if login in session is not set
-    header("Location: ../login/");
+
+//    header("Location: ../login/");
 }
 
 $checkHoraire = $conn->query("SELECT * FROM table_client_info");
@@ -12,7 +13,6 @@ if($checkHoraire->num_rows == 1){
     $heure_fin = $infos['heure_fin'].":00";
     $heure_actuel = date('H:i:s');
     if($_SESSION['role'] != "superadmin"){
-        var_dump(!($heure_actuel >= $heure_debut && $heure_actuel <= $heure_fin));
         if( !($heure_actuel >= $heure_debut && $heure_actuel <= $heure_fin) == false){
             echo "<script>alert('Magasin fermé ! ')</script>";
             session_destroy();
