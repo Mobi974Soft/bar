@@ -5,36 +5,28 @@ include('../template/header.php');
 include('../infos.php');
 include ('../DBConfig.php');
 
-if(isset($_POST['btnSaveProfil'])){
+
+$check = $conn->query("SELECT * FROM table_client_info");
+if($check->num_rows == 1) {
+    $info = $check->fetch_assoc();
+    $id = $info['id'];
+    $nom = $info['nom_magasin'];
+    $horairedebut = $info['heure_debut'];
+    $horairefin = $info['heure_fin'];
+}
+if(isset($_POST['btnSaveProfil'])) {
     $nom_magasin = htmlspecialchars($_POST['nom_magasin']);
-//    $adresse = htmlspecialchars($_POST['adresse']);
-//    $code_postal = htmlspecialchars($_POST['code_postal']);
-//    $ville = htmlspecialchars($_POST['ville']);
-//    $siret = htmlspecialchars($_POST['siret']);
-//    $phone = htmlspecialchars($_POST['phone']);
     $heure_debut = $_POST['heure_debut'];
     $heure_fin = $_POST['heure_fin'] ;
-    $check = $conn->query("SELECT * FROM table_client_info");
-    if($check->num_rows == 1){
-        $info = $check->fetch_assoc();
-        $id = $info['id'];
-        $nom = $info['nom_magasin'];
-        $horairedebut = $info['heure_debut'];
-        $horairefin = $info['heure_fin'];
+    if($check->num_rows == 1) {
         $sql = "UPDATE `table_client_info` 
 SET `nom_magasin`='$nom_magasin',`heure_debut`='$heure_debut',`heure_fin`='$heure_fin',`nbcaisse`='3' WHERE $id";
-
-    }elseif($check->num_rows != 1){
+    }
+    elseif($check->num_rows != 1){
         $sql = "INSERT INTO `table_client_info`( `nom_magasin`, `heure_debut`, `heure_fin`, `nbcaisse`) 
             VALUES ('$nom_magasin','$heure_debut','$heure_fin','3')";
     }
-
     $query = $conn->query($sql);
-
-
-
-
-
 }
 
 ?>

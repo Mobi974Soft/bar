@@ -1,11 +1,8 @@
 <?php
 session_start();
-//if (!isset($_SESSION['loggedin'],$_SESSION['id_caisse'])) { //if login in session is not set
-//    $checkIDcaisse = $_SESSION['id_caisse'];
-//    $sql = "SELECT * FROM id_caisse_used "
-//
-//
-//}
+if (!isset($_SESSION['loggedin'],$_SESSION['id_caisse'])) { //if login in session is not set
+    header("Location: ../login/");
+}
 
 ?>
 <!DOCTYPE html>
@@ -922,19 +919,24 @@ overflow: hidden;">
 
     function checkIfCaisseConnected() {
         var id_caisse ='<?php echo isset($_SESSION["session"]) ? $_SESSION["id_caisse"] : 0 ?>'
+        var expiration = '<?php echo isset($_SESSION["expiration"]) ? $_SESSION["expiration"] : 0 ?>'
+        var user_id = '<?php echo isset($_SESSION["user_id"]) ? $_SESSION["user_id"] : 0 ?>';
         $.ajax({
             url: "../login/checkIfConnected.php",
             type: "POST",
             contentType: "application/json",
-            data: JSON.stringify({"id_caisse": id_caisse, "action": "check"}),
+            data: JSON.stringify({"id_caisse": id_caisse, "action": "check","expiration":expiration,"user_id":user_id}),
             success: function (data) {
+                console.log(data)
                 var result = JSON.parse(data)
-                // if (result.response === 0) {
-                //     Toast.fire({
-                //         icon: 'error',
-                //         title: result.message
-                //     })
+                // if(result.response === 0){
+                //         Toast.fire({
+                //             icon: 'error',
+                //             title: result.message
+                //         })
+                //
                 // }
+
             }
         })
     }

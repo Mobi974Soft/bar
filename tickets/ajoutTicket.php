@@ -128,23 +128,23 @@ if (isset($postdata)) {
                 }
 
                 try {
-                // $connector = null;
-                // $connector = new WindowsPrintConnector("Receipt Printer");
+                 $connector = null;
+                 $connector = new WindowsPrintConnector("Receipt Printer");
 
-                // $printer = new Printer($connector);
+                 $printer = new Printer($connector);
                     if ($printTicket == true) {
-                    // $printer -> text($ticket);
-                    // $printer -> cut();
-                    // $printer->pulse();
+                     $printer -> text($ticket);
+                     $printer -> cut();
+                     $printer->pulse();
                         echo json_encode(array('response' => 1, 'message' => 'IMPRIME TICKET + OUVERTURE TIROIR CAISSE', 'session' => $session, 'id_caisse' => $id_caisse));
                         exit;
                     } else {
-                    // $printer -> text($ticket);
-                    // $printer -> cut();
+                     $printer -> text($ticket);
+                     $printer -> cut();
                         echo json_encode(array('response' => 1, 'message' => 'IMPRIME TICKET SEULEMENT', 'session' => $session, 'id_caisse' => $id_caisse));
                         exit;
                     }
-                // $printer->close();
+                 $printer->close();
                 } catch (Exception $e) {
                     echo json_encode("Impossible d'imprimer sur cette imprimante: " . $e->getMessage() . "\n");
                     exit;

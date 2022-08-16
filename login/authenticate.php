@@ -18,7 +18,10 @@ if (!isset($_POST['password'])) {
                 $_SESSION['loggedin'] = TRUE;
                 $_SESSION['id'] = $id;
                 $_SESSION['client_id'] = $client_id;
+                $_SESSION['user_id'] = $id;
                 $_SESSION['role'] = $role;
+//                $_SESSION['expiration'] =  date('Y-m-d H:i:s', strtotime('+11 hours 30 minutes'));
+                $_SESSION['expiration'] =  date('Y-m-d H:i:s', strtotime('+11 hours +30 minutes'));
 //                echo 'Welcome ' . $_SESSION['name'] . '!';
                 echo json_encode(array('response' => 1, 'message' => 'Connexion réussi !', 'role' => $role));
             } else {

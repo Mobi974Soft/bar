@@ -12,10 +12,10 @@ Chemin LEFAGUYES La Cocoteraie BAT 3
 
  Qte*PU   Designation     Mttc   TVA
 --------------------------------------
-1*10.00  Divers         10.00€    0%  
-1*1.00   Remise Excepti 1.00€     0%  
+1*14.90  SAC LICORNE    14.90€    8.5%
+1*19.90  BOITE PROTECT  19.90€    8.5%
 
-9€
+34.8€
       MERCI DE VOTRE VISITE
         ET A TRES BIENTOT
 ------------------------------------------

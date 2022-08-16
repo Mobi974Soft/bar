@@ -13,7 +13,7 @@ if($checkHoraire->num_rows == 1){
     $heure_fin = $infos['heure_fin'].":00";
     $heure_actuel = date('H:i:s');
     if($_SESSION['role'] != "superadmin"){
-        if( !($heure_actuel >= $heure_debut && $heure_actuel <= $heure_fin) == false){
+        if( !($heure_actuel >= $heure_debut && $heure_actuel <= $heure_fin)){
             echo "<script>alert('Magasin fermé ! ')</script>";
             session_destroy();
             header("Location: ../login/?info=close");
