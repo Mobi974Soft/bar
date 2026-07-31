@@ -176,12 +176,16 @@ if(isset($postdata)){
         }
 	}elseif(isset($request->paiementDetails)){
 		$numerotable = isset($request->id_table) ? max(0, (int) $request->id_table) : 0;
-		if (!isset($request->id_table)) {
-			$sql = "SELECT numero FROM restaurant_tables WHERE status = 1";
-			$table = $conn->query($sql);
-			if ($table && $table->num_rows > 0) {
-				$numerotable = (int) $table->fetch_assoc()["numero"];
-			}
+		$activeTableNumber = 0;
+		$sql = "SELECT numero FROM restaurant_tables WHERE status = 1";
+		$table = $conn->query($sql);
+		if ($table && $table->num_rows > 0) {
+			$activeTableNumber = (int) $table->fetch_assoc()["numero"];
+		}
+		// L'écran de paiement peut ne plus contenir le bouton promo et envoyer 0.
+		// Dans ce cas, le panier réel reste celui de la table active.
+		if ($numerotable <= 0 && $activeTableNumber > 0) {
+			$numerotable = $activeTableNumber;
 		}
         $resteApayer = $request->resteAPayer;
         $paiementDetails = $request->paiementDetails;
@@ -189,6 +193,14 @@ if(isset($postdata)){
         $infoTicket = $request->infoTicket;
         $id_caisse = $request->id_caisse;
 		$promoState = PromoCode::getState($id_caisse, $numerotable);
+		// Repli serveur si l'identifiant envoyé par l'interface est périmé.
+		if (!$promoState && $activeTableNumber > 0 && $activeTableNumber !== $numerotable) {
+			$activePromoState = PromoCode::getState($id_caisse, $activeTableNumber);
+			if ($activePromoState) {
+				$numerotable = $activeTableNumber;
+				$promoState = $activePromoState;
+			}
+		}
 		$promoProductCount = 0;
 		$promoDiscountTotal = 0;
 		$promoTrackingWarning = '';
