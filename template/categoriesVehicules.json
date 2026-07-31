@@ -1,0 +1,1622 @@
+[
+	{
+		"Marques": "AUDI",
+		"Modeles": "A1",
+		"Type": "S"
+	},
+	{
+		"Marques": "AUDI",
+		"Modeles": "A3",
+		"Type": "L"
+	},
+	{
+		"Marques": "AUDI",
+		"Modeles": "A4",
+		"Type": "L"
+	},
+	{
+		"Marques": "AUDI",
+		"Modeles": "A5",
+		"Type": "L"
+	},
+	{
+		"Marques": "AUDI",
+		"Modeles": "A6",
+		"Type": "XL"
+	},
+	{
+		"Marques": "AUDI",
+		"Modeles": "A7",
+		"Type": "XL"
+	},
+	{
+		"Marques": "AUDI",
+		"Modeles": "A8",
+		"Type": "XL"
+	},
+	{
+		"Marques": "AUDI",
+		"Modeles": "Q2",
+		"Type": "M"
+	},
+	{
+		"Marques": "AUDI",
+		"Modeles": "Q3",
+		"Type": "L"
+	},
+	{
+		"Marques": "AUDI",
+		"Modeles": "Q5",
+		"Type": "XL"
+	},
+	{
+		"Marques": "AUDI",
+		"Modeles": "Q7",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "AUDI",
+		"Modeles": "TT",
+		"Type": "M"
+	},
+	{
+		"Marques": "VW",
+		"Modeles": "UP",
+		"Type": "S"
+	},
+	{
+		"Marques": "VW",
+		"Modeles": "FOX",
+		"Type": "S"
+	},
+	{
+		"Marques": "VW",
+		"Modeles": "Polo",
+		"Type": "M"
+	},
+	{
+		"Marques": "VW",
+		"Modeles": "Golf",
+		"Type": "L"
+	},
+	{
+		"Marques": "VW",
+		"Modeles": "Golf VAN / SW",
+		"Type": "XL"
+	},
+	{
+		"Marques": "VW",
+		"Modeles": "Passat",
+		"Type": "L"
+	},
+	{
+		"Marques": "VW",
+		"Modeles": "Passat SW",
+		"Type": "XL"
+	},
+	{
+		"Marques": "VW",
+		"Modeles": "Coccinelle",
+		"Type": "L"
+	},
+	{
+		"Marques": "VW",
+		"Modeles": "Sirocco",
+		"Type": "L"
+	},
+	{
+		"Marques": "VW",
+		"Modeles": "Touran",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "VW",
+		"Modeles": "Touareg",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "VW",
+		"Modeles": "Sharan",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "VW",
+		"Modeles": "Arteon",
+		"Type": "XL"
+	},
+	{
+		"Marques": "MERCEDES",
+		"Modeles": "classA",
+		"Type": "L"
+	},
+	{
+		"Marques": "MERCEDES",
+		"Modeles": "classB",
+		"Type": "L"
+	},
+	{
+		"Marques": "MERCEDES",
+		"Modeles": "classC",
+		"Type": "L"
+	},
+	{
+		"Marques": "MERCEDES",
+		"Modeles": "GLA",
+		"Type": "XL"
+	},
+	{
+		"Marques": "MERCEDES",
+		"Modeles": "GLC",
+		"Type": "XL"
+	},
+	{
+		"Marques": "MERCEDES",
+		"Modeles": "SLC",
+		"Type": "M"
+	},
+	{
+		"Marques": "MERCEDES",
+		"Modeles": "classE",
+		"Type": "XL"
+	},
+	{
+		"Marques": "MERCEDES",
+		"Modeles": "GLE",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "MERCEDES",
+		"Modeles": "CLS",
+		"Type": "XL"
+	},
+	{
+		"Marques": "MERCEDES",
+		"Modeles": "classS",
+		"Type": "XL"
+	},
+	{
+		"Marques": "MERCEDES",
+		"Modeles": "SL",
+		"Type": "L"
+	},
+	{
+		"Marques": "MERCEDES",
+		"Modeles": "AMG GT",
+		"Type": "L"
+	},
+	{
+		"Marques": "MERCEDES",
+		"Modeles": "classG",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "MERCEDES",
+		"Modeles": "classV",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "twingo",
+		"Type": "S"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "ZOE",
+		"Type": "S"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "CLIO",
+		"Type": "M"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "CLIO ESTATE",
+		"Type": "L"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "Capture",
+		"Type": "M"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "Megane",
+		"Type": "L"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "Megane ESTATE",
+		"Type": "L"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "SCENIC",
+		"Type": "XL"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "Grand SCENIC",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "Kadjar",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "Talisman",
+		"Type": "L"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "Talisman Estate",
+		"Type": "XL"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "Koleos",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "ESPACE",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "ALASKAN",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "Kangoo",
+		"Type": "L"
+	},
+	{
+		"Marques": "RENAULT",
+		"Modeles": "Trafic",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "PEUGEOT",
+		"Modeles": "108",
+		"Type": "S"
+	},
+	{
+		"Marques": "PEUGEOT",
+		"Modeles": "208",
+		"Type": "M"
+	},
+	{
+		"Marques": "PEUGEOT",
+		"Modeles": "308",
+		"Type": "L"
+	},
+	{
+		"Marques": "PEUGEOT",
+		"Modeles": "308 SW",
+		"Type": "XL"
+	},
+	{
+		"Marques": "PEUGEOT",
+		"Modeles": "407",
+		"Type": "L"
+	},
+	{
+		"Marques": "PEUGEOT",
+		"Modeles": "508",
+		"Type": "L"
+	},
+	{
+		"Marques": "PEUGEOT",
+		"Modeles": "508 SW",
+		"Type": "XL"
+	},
+	{
+		"Marques": "PEUGEOT",
+		"Modeles": "3008",
+		"Type": "XL"
+	},
+	{
+		"Marques": "PEUGEOT",
+		"Modeles": "2008",
+		"Type": "L"
+	},
+	{
+		"Marques": "PEUGEOT",
+		"Modeles": "Partner",
+		"Type": "L"
+	},
+	{
+		"Marques": "PEUGEOT",
+		"Modeles": "Bipper",
+		"Type": "M"
+	},
+	{
+		"Marques": "PEUGEOT",
+		"Modeles": "Expert",
+		"Type": "XL"
+	},
+	{
+		"Marques": "PEUGEOT",
+		"Modeles": "Boxer",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "CITROEN",
+		"Modeles": "C-zero",
+		"Type": "S"
+	},
+	{
+		"Marques": "CITROEN",
+		"Modeles": "C1",
+		"Type": "S"
+	},
+	{
+		"Marques": "CITROEN",
+		"Modeles": "C2",
+		"Type": "S"
+	},
+	{
+		"Marques": "CITROEN",
+		"Modeles": "C3",
+		"Type": "M"
+	},
+	{
+		"Marques": "CITROEN",
+		"Modeles": "C4",
+		"Type": "L"
+	},
+	{
+		"Marques": "CITROEN",
+		"Modeles": "C3 picasso",
+		"Type": "L"
+	},
+	{
+		"Marques": "CITROEN",
+		"Modeles": "C4 picasso",
+		"Type": "XL"
+	},
+	{
+		"Marques": "CITROEN",
+		"Modeles": "C3 cactus",
+		"Type": "M"
+	},
+	{
+		"Marques": "CITROEN",
+		"Modeles": "C4 cactus",
+		"Type": "L"
+	},
+	{
+		"Marques": "CITROEN",
+		"Modeles": "Jumper",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "CITROEN",
+		"Modeles": "Nemo",
+		"Type": "M"
+	},
+	{
+		"Marques": "CITROEN",
+		"Modeles": "SPACE TOURER",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "CITROEN",
+		"Modeles": "",
+		"Type": "XL"
+	},
+	{
+		"Marques": "CITROEN",
+		"Modeles": "Grand C4 Picasso",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "CITROEN",
+		"Modeles": "Berlingo",
+		"Type": "L"
+	},
+	{
+		"Marques": "CITROEN",
+		"Modeles": "E-MEHARI",
+		"Type": "M"
+	},
+	{
+		"Marques": "SKODA",
+		"Modeles": "Karoq",
+		"Type": "XL"
+	},
+	{
+		"Marques": "SKODA",
+		"Modeles": "Kodiaq",
+		"Type": "XL"
+	},
+	{
+		"Marques": "SKODA",
+		"Modeles": "Citigo",
+		"Type": "S"
+	},
+	{
+		"Marques": "SKODA",
+		"Modeles": "Fabia",
+		"Type": "M"
+	},
+	{
+		"Marques": "SKODA",
+		"Modeles": "Rapid",
+		"Type": "XL"
+	},
+	{
+		"Marques": "SKODA",
+		"Modeles": "Octavia",
+		"Type": "XL"
+	},
+	{
+		"Marques": "SKODA",
+		"Modeles": "Superb",
+		"Type": "L"
+	},
+	{
+		"Marques": "SEAT",
+		"Modeles": "mii",
+		"Type": "S"
+	},
+	{
+		"Marques": "SEAT",
+		"Modeles": "ibiza",
+		"Type": "M"
+	},
+	{
+		"Marques": "SEAT",
+		"Modeles": "Toledo",
+		"Type": "L"
+	},
+	{
+		"Marques": "SEAT",
+		"Modeles": "leon",
+		"Type": "L"
+	},
+	{
+		"Marques": "SEAT",
+		"Modeles": "leon ST",
+		"Type": "XL"
+	},
+	{
+		"Marques": "SEAT",
+		"Modeles": "Arona",
+		"Type": "XL"
+	},
+	{
+		"Marques": "SEAT",
+		"Modeles": "Ateca",
+		"Type": "XL"
+	},
+	{
+		"Marques": "SEAT",
+		"Modeles": "Alhambra",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "JEEP",
+		"Modeles": "Renegade",
+		"Type": "XL"
+	},
+	{
+		"Marques": "JEEP",
+		"Modeles": "Compas",
+		"Type": "XL"
+	},
+	{
+		"Marques": "JEEP",
+		"Modeles": "Cherokee",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "JEEP",
+		"Modeles": "Grand Cherokee",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "JEEP",
+		"Modeles": "Wrangler",
+		"Type": "XL"
+	},
+	{
+		"Marques": "MAZDA",
+		"Modeles": "2",
+		"Type": "M"
+	},
+	{
+		"Marques": "MAZDA",
+		"Modeles": "3",
+		"Type": "L"
+	},
+	{
+		"Marques": "MAZDA",
+		"Modeles": "6",
+		"Type": "L"
+	},
+	{
+		"Marques": "MAZDA",
+		"Modeles": "CX-3",
+		"Type": "XL"
+	},
+	{
+		"Marques": "MAZDA",
+		"Modeles": "CX-5",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "MAZDA",
+		"Modeles": "MX-5",
+		"Type": "M"
+	},
+	{
+		"Marques": "PORSCHE",
+		"Modeles": "Cayman",
+		"Type": "M"
+	},
+	{
+		"Marques": "PORSCHE",
+		"Modeles": "Boxter",
+		"Type": "M"
+	},
+	{
+		"Marques": "PORSCHE",
+		"Modeles": "911",
+		"Type": "L"
+	},
+	{
+		"Marques": "PORSCHE",
+		"Modeles": "Panamera",
+		"Type": "XL"
+	},
+	{
+		"Marques": "PORSCHE",
+		"Modeles": "Macan",
+		"Type": "XL"
+	},
+	{
+		"Marques": "PORSCHE",
+		"Modeles": "Cayenne",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "TESLA",
+		"Modeles": "Model S",
+		"Type": "L"
+	},
+	{
+		"Marques": "TESLA",
+		"Modeles": "Model X",
+		"Type": "XL"
+	},
+	{
+		"Marques": "TESLA",
+		"Modeles": "Model 3",
+		"Type": "L"
+	},
+	{
+		"Marques": "SAAB",
+		"Modeles": "93",
+		"Type": "L"
+	},
+	{
+		"Marques": "SAAB",
+		"Modeles": "95",
+		"Type": "XL"
+	},
+	{
+		"Marques": "FIAT",
+		"Modeles": "500",
+		"Type": "S"
+	},
+	{
+		"Marques": "FIAT",
+		"Modeles": "punto",
+		"Type": "M"
+	},
+	{
+		"Marques": "FIAT",
+		"Modeles": "bravo",
+		"Type": "L"
+	},
+	{
+		"Marques": "FIAT",
+		"Modeles": "multiplat",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "TOYOTA",
+		"Modeles": "Yaris",
+		"Type": "S"
+	},
+	{
+		"Marques": "TOYOTA",
+		"Modeles": "Auris",
+		"Type": "L"
+	},
+	{
+		"Marques": "TOYOTA",
+		"Modeles": "Auris Touring",
+		"Type": "XL"
+	},
+	{
+		"Marques": "TOYOTA",
+		"Modeles": "LAND CRUISER",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "TOYOTA",
+		"Modeles": "Prius",
+		"Type": "L"
+	},
+	{
+		"Marques": "TOYOTA",
+		"Modeles": "Prius +",
+		"Type": "XL"
+	},
+	{
+		"Marques": "TOYOTA",
+		"Modeles": "CHR",
+		"Type": "XL"
+	},
+	{
+		"Marques": "TOYOTA",
+		"Modeles": "Aygo",
+		"Type": "S"
+	},
+	{
+		"Marques": "TOYOTA",
+		"Modeles": "Corolla",
+		"Type": "L"
+	},
+	{
+		"Marques": "TOYOTA",
+		"Modeles": "Hilux",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "TOYOTA",
+		"Modeles": "Supra",
+		"Type": "L"
+	},
+	{
+		"Marques": "TOYOTA",
+		"Modeles": "GT86",
+		"Type": "M"
+	},
+	{
+		"Marques": "TOYOTA",
+		"Modeles": "RAV4",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "TOYOTA",
+		"Modeles": "Verso",
+		"Type": "XL"
+	},
+	{
+		"Marques": "TOYOTA",
+		"Modeles": "Mirai",
+		"Type": "L"
+	},
+	{
+		"Marques": "TOYOTA",
+		"Modeles": "PROACE",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "OPEL",
+		"Modeles": "Corsa",
+		"Type": "M"
+	},
+	{
+		"Marques": "OPEL",
+		"Modeles": "Astra",
+		"Type": "L"
+	},
+	{
+		"Marques": "OPEL",
+		"Modeles": "Mokka",
+		"Type": "XL"
+	},
+	{
+		"Marques": "OPEL",
+		"Modeles": "Adam",
+		"Type": "S"
+	},
+	{
+		"Marques": "OPEL",
+		"Modeles": "Cascada",
+		"Type": "L"
+	},
+	{
+		"Marques": "OPEL",
+		"Modeles": "Crossland",
+		"Type": "L"
+	},
+	{
+		"Marques": "OPEL",
+		"Modeles": "Grandland",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "OPEL",
+		"Modeles": "Karl",
+		"Type": "S"
+	},
+	{
+		"Marques": "OPEL",
+		"Modeles": "Insignia",
+		"Type": "XL"
+	},
+	{
+		"Marques": "OPEL",
+		"Modeles": "Movano",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "OPEL",
+		"Modeles": "Vivaro",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "OPEL",
+		"Modeles": "Zafira",
+		"Type": "XL"
+	},
+	{
+		"Marques": "INFINITY",
+		"Modeles": "Q30",
+		"Type": "XL"
+	},
+	{
+		"Marques": "INFINITY",
+		"Modeles": "Q50",
+		"Type": "XL"
+	},
+	{
+		"Marques": "INFINITY",
+		"Modeles": "Q60",
+		"Type": "L"
+	},
+	{
+		"Marques": "INFINITY",
+		"Modeles": "Q70",
+		"Type": "XL"
+	},
+	{
+		"Marques": "INFINITY",
+		"Modeles": "QX30",
+		"Type": "XL"
+	},
+	{
+		"Marques": "INFINITY",
+		"Modeles": "QX70",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "NISSAN",
+		"Modeles": "Juke",
+		"Type": "L"
+	},
+	{
+		"Marques": "NISSAN",
+		"Modeles": "Qashqai",
+		"Type": "XL"
+	},
+	{
+		"Marques": "NISSAN",
+		"Modeles": "X-TRAIL",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "NISSAN",
+		"Modeles": "Micra",
+		"Type": "S"
+	},
+	{
+		"Marques": "NISSAN",
+		"Modeles": "Pulsar",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "NISSAN",
+		"Modeles": "NV200",
+		"Type": "XL"
+	},
+	{
+		"Marques": "NISSAN",
+		"Modeles": "Leaf",
+		"Type": "L"
+	},
+	{
+		"Marques": "NISSAN",
+		"Modeles": "Navara",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "NISSAN",
+		"Modeles": "370 Z",
+		"Type": "M"
+	},
+	{
+		"Marques": "NISSAN",
+		"Modeles": "GT-R",
+		"Type": "L"
+	},
+	{
+		"Marques": "NISSAN",
+		"Modeles": "Evalia",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "DODGE",
+		"Modeles": "Charger",
+		"Type": "XL"
+	},
+	{
+		"Marques": "DODGE",
+		"Modeles": "Challenger",
+		"Type": "L"
+	},
+	{
+		"Marques": "DODGE",
+		"Modeles": "Viper",
+		"Type": "L"
+	},
+	{
+		"Marques": "DODGE",
+		"Modeles": "Dart",
+		"Type": "L"
+	},
+	{
+		"Marques": "DODGE",
+		"Modeles": "Journey",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "DODGE",
+		"Modeles": "Durango",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "DODGE",
+		"Modeles": "Grand Caravan",
+		"Type": "XXXL"
+	},
+	{
+		"Marques": "DODGE",
+		"Modeles": "Dodge Demon",
+		"Type": "L"
+	},
+	{
+		"Marques": "HYUNDAI",
+		"Modeles": "i10",
+		"Type": "S"
+	},
+	{
+		"Marques": "HYUNDAI",
+		"Modeles": "i20",
+		"Type": "M"
+	},
+	{
+		"Marques": "HYUNDAI",
+		"Modeles": "i30",
+		"Type": "L"
+	},
+	{
+		"Marques": "HYUNDAI",
+		"Modeles": "i30SW",
+		"Type": "XL"
+	},
+	{
+		"Marques": "HYUNDAI",
+		"Modeles": "IONIQ",
+		"Type": "L"
+	},
+	{
+		"Marques": "HYUNDAI",
+		"Modeles": "Kona",
+		"Type": "L"
+	},
+	{
+		"Marques": "HYUNDAI",
+		"Modeles": "ix20",
+		"Type": "M"
+	},
+	{
+		"Marques": "HYUNDAI",
+		"Modeles": "Tucson",
+		"Type": "XL"
+	},
+	{
+		"Marques": "HYUNDAI",
+		"Modeles": "SANTA FE",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "HYUNDAI",
+		"Modeles": "ix35",
+		"Type": "XL"
+	},
+	{
+		"Marques": "HYUNDAI",
+		"Modeles": "i40 Berline",
+		"Type": "L"
+	},
+	{
+		"Marques": "HYUNDAI",
+		"Modeles": "i40 Sport Wagon",
+		"Type": "XL"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "serie 1",
+		"Type": "L"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "serie 2",
+		"Type": "L"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "serie 2 Active Tourer",
+		"Type": "XL"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "serie 2 Grand Tourer",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "serie 3 Berline",
+		"Type": "L"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "serie 3 Touring",
+		"Type": "XL"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "serie 3 Grand Turismo",
+		"Type": "L"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "",
+		"Type": "L"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "serie 5 berline",
+		"Type": "L"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "serie 5 Touring",
+		"Type": "XL"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "serie 6",
+		"Type": "XL"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "serie 7 berline",
+		"Type": "XL"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "serie 7 limousine",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "X1",
+		"Type": "XL"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "X3",
+		"Type": "XL"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "X5",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "X6",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "i3",
+		"Type": "M"
+	},
+	{
+		"Marques": "BMW",
+		"Modeles": "i8",
+		"Type": "L"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "Ka+",
+		"Type": "S"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "Fiesta",
+		"Type": "M"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "B-MAX",
+		"Type": "L"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "Focus",
+		"Type": "L"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "C-MAX",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "Grand C-MAX",
+		"Type": "XXXL"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "Ecosport",
+		"Type": "L"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "Kuga",
+		"Type": "XL"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "Edge",
+		"Type": "XL"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "Mondeo",
+		"Type": "XL"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "Mustang",
+		"Type": "L"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "S-Max",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "Galaxy",
+		"Type": "XXXL"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "Ranger",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "Tourneo Courier",
+		"Type": "L"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "Tourneo Connect",
+		"Type": "L"
+	},
+	{
+		"Marques": "FORD",
+		"Modeles": "Tourneo Custom",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "LEXUS",
+		"Modeles": "CT",
+		"Type": "L"
+	},
+	{
+		"Marques": "LEXUS",
+		"Modeles": "IS",
+		"Type": "L"
+	},
+	{
+		"Marques": "LEXUS",
+		"Modeles": "NX",
+		"Type": "XL"
+	},
+	{
+		"Marques": "LEXUS",
+		"Modeles": "GS",
+		"Type": "XL"
+	},
+	{
+		"Marques": "LEXUS",
+		"Modeles": "RC",
+		"Type": "L"
+	},
+	{
+		"Marques": "LEXUS",
+		"Modeles": "RX",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "LEXUS",
+		"Modeles": "LC",
+		"Type": "L"
+	},
+	{
+		"Marques": "LEXUS",
+		"Modeles": "LS",
+		"Type": "L"
+	},
+	{
+		"Marques": "LAND ROVER",
+		"Modeles": "Evoque",
+		"Type": "XL"
+	},
+	{
+		"Marques": "LAND ROVER",
+		"Modeles": "VELAR",
+		"Type": "XL"
+	},
+	{
+		"Marques": "LAND ROVER",
+		"Modeles": "SPORT",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "LAND ROVER",
+		"Modeles": "RANGE",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "JAGUAR",
+		"Modeles": "XE",
+		"Type": "XL"
+	},
+	{
+		"Marques": "JAGUAR",
+		"Modeles": "XF",
+		"Type": "XL"
+	},
+	{
+		"Marques": "JAGUAR",
+		"Modeles": "XJ",
+		"Type": "XL"
+	},
+	{
+		"Marques": "JAGUAR",
+		"Modeles": "E-PACE",
+		"Type": "XL"
+	},
+	{
+		"Marques": "JAGUAR",
+		"Modeles": "F-PACE",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "JAGUAR",
+		"Modeles": "F-TYPE",
+		"Type": "L"
+	},
+	{
+		"Marques": "JAGUAR",
+		"Modeles": "I-PACE",
+		"Type": "XL"
+	},
+	{
+		"Marques": "ALFA ROMEO",
+		"Modeles": "QUADRIFOGLIO",
+		"Type": "L"
+	},
+	{
+		"Marques": "ALFA ROMEO",
+		"Modeles": "STELVIO",
+		"Type": "XL"
+	},
+	{
+		"Marques": "ALFA ROMEO",
+		"Modeles": "GIULIA",
+		"Type": "L"
+	},
+	{
+		"Marques": "ALFA ROMEO",
+		"Modeles": "4C",
+		"Type": "M"
+	},
+	{
+		"Marques": "ALFA ROMEO",
+		"Modeles": "GUILIETTA",
+		"Type": "L"
+	},
+	{
+		"Marques": "ALFA ROMEO",
+		"Modeles": "MITO",
+		"Type": "M"
+	},
+	{
+		"Marques": "HONDA",
+		"Modeles": "CIVIC",
+		"Type": "M"
+	},
+	{
+		"Marques": "HONDA",
+		"Modeles": "NSX",
+		"Type": "M"
+	},
+	{
+		"Marques": "HONDA",
+		"Modeles": "JAZZ",
+		"Type": "M"
+	},
+	{
+		"Marques": "HONDA",
+		"Modeles": "HR-V",
+		"Type": "XL"
+	},
+	{
+		"Marques": "HONDA",
+		"Modeles": "CR-V",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "HONDA",
+		"Modeles": "CIVIC TOURER",
+		"Type": "XL"
+	},
+	{
+		"Marques": "MINI",
+		"Modeles": "HATCH 3 portes",
+		"Type": "S"
+	},
+	{
+		"Marques": "MINI",
+		"Modeles": "HATCH 5 portes",
+		"Type": "M"
+	},
+	{
+		"Marques": "MINI",
+		"Modeles": "Cabrio",
+		"Type": "S"
+	},
+	{
+		"Marques": "MINI",
+		"Modeles": "CLUBMAN",
+		"Type": "L"
+	},
+	{
+		"Marques": "MINI",
+		"Modeles": "COUNTRYMAN",
+		"Type": "L"
+	},
+	{
+		"Marques": "MINI",
+		"Modeles": "JohnCooper",
+		"Type": "L"
+	},
+	{
+		"Marques": "MINI",
+		"Modeles": "ELECTRIC",
+		"Type": "L"
+	},
+	{
+		"Marques": "KIA",
+		"Modeles": "PICANTO",
+		"Type": "S"
+	},
+	{
+		"Marques": "KIA",
+		"Modeles": "RIO",
+		"Type": "M"
+	},
+	{
+		"Marques": "KIA",
+		"Modeles": "CEE'D",
+		"Type": "L"
+	},
+	{
+		"Marques": "KIA",
+		"Modeles": "CEE'D SW",
+		"Type": "XL"
+	},
+	{
+		"Marques": "KIA",
+		"Modeles": "PROCEE'D",
+		"Type": "L"
+	},
+	{
+		"Marques": "KIA",
+		"Modeles": "VENGA",
+		"Type": "S"
+	},
+	{
+		"Marques": "KIA",
+		"Modeles": "CARENS",
+		"Type": "M"
+	},
+	{
+		"Marques": "KIA",
+		"Modeles": "SOUL",
+		"Type": "XL"
+	},
+	{
+		"Marques": "KIA",
+		"Modeles": "STONIC",
+		"Type": "L"
+	},
+	{
+		"Marques": "KIA",
+		"Modeles": "NIRO",
+		"Type": "XL"
+	},
+	{
+		"Marques": "KIA",
+		"Modeles": "SPORTAGE",
+		"Type": "XL"
+	},
+	{
+		"Marques": "KIA",
+		"Modeles": "SORENTO",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "KIA",
+		"Modeles": "OPTIMA",
+		"Type": "L"
+	},
+	{
+		"Marques": "KIA",
+		"Modeles": "OPTIMA SW",
+		"Type": "XL"
+	},
+	{
+		"Marques": "KIA",
+		"Modeles": "STINGER",
+		"Type": "XL"
+	},
+	{
+		"Marques": "SUZUKI",
+		"Modeles": "SWIFT",
+		"Type": "S"
+	},
+	{
+		"Marques": "SUZUKI",
+		"Modeles": "VITARA",
+		"Type": "XL"
+	},
+	{
+		"Marques": "SUZUKI",
+		"Modeles": "GRAND VITARO",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "SUZUKI",
+		"Modeles": "IGNIS",
+		"Type": "M"
+	},
+	{
+		"Marques": "SUZUKI",
+		"Modeles": "BALENO",
+		"Type": "L"
+	},
+	{
+		"Marques": "SUZUKI",
+		"Modeles": "JIMMY",
+		"Type": "XL"
+	},
+	{
+		"Marques": "SUZUKI",
+		"Modeles": "S-CROSS",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "SUZUKI",
+		"Modeles": "CELERIO",
+		"Type": "M"
+	},
+	{
+		"Marques": "CHEVROLET",
+		"Modeles": "SPARK",
+		"Type": "S"
+	},
+	{
+		"Marques": "CHEVROLET",
+		"Modeles": "SONIC",
+		"Type": "M"
+	},
+	{
+		"Marques": "CHEVROLET",
+		"Modeles": "CRUZE",
+		"Type": "L"
+	},
+	{
+		"Marques": "CHEVROLET",
+		"Modeles": "MALIBU",
+		"Type": "L"
+	},
+	{
+		"Marques": "CHEVROLET",
+		"Modeles": "IMPALA",
+		"Type": "XL"
+	},
+	{
+		"Marques": "CHEVROLET",
+		"Modeles": "VOLT",
+		"Type": "L"
+	},
+	{
+		"Marques": "CHEVROLET",
+		"Modeles": "BOLT EV",
+		"Type": "L"
+	},
+	{
+		"Marques": "CHEVROLET",
+		"Modeles": "CAMARO",
+		"Type": "L"
+	},
+	{
+		"Marques": "CHEVROLET",
+		"Modeles": "CORVETTE",
+		"Type": "L"
+	},
+	{
+		"Marques": "CHEVROLET",
+		"Modeles": "TRAX",
+		"Type": "L"
+	},
+	{
+		"Marques": "CHEVROLET",
+		"Modeles": "EQUINOX",
+		"Type": "XL"
+	},
+	{
+		"Marques": "CHEVROLET",
+		"Modeles": "TRAVERSE",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "CHEVROLET",
+		"Modeles": "TAHOE",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "CHEVROLET",
+		"Modeles": "SUBURBAN",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "VOLVO",
+		"Modeles": "XC60",
+		"Type": "XL"
+	},
+	{
+		"Marques": "VOLVO",
+		"Modeles": "XC90",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "VOLVO",
+		"Modeles": "XC40",
+		"Type": "XL"
+	},
+	{
+		"Marques": "VOLVO",
+		"Modeles": "V90",
+		"Type": "XXL"
+	},
+	{
+		"Marques": "VOLVO",
+		"Modeles": "V40",
+		"Type": "L"
+	},
+	{
+		"Marques": "VOLVO",
+		"Modeles": "V60",
+		"Type": "XL"
+	},
+	{
+		"Marques": "VOLVO",
+		"Modeles": "S90",
+		"Type": "XL"
+	},
+	{
+		"Marques": "VOLVO",
+		"Modeles": "S60",
+		"Type": "L"
+	},
+	{
+		"Marques": "VOLVO",
+		"Modeles": "C30",
+		"Type": "L"
+	},
+	{
+		"Marques": "DS",
+		"Modeles": "3",
+		"Type":"M"
+	},
+	{
+		"Marques": "DS",
+		"Modeles": "3 Crossback",
+		"Type":"L"
+	},
+	{
+		"Marques": "DS",
+		"Modeles": "4",
+		"Type":"L"
+	},
+	{
+		"Marques": "DS",
+		"Modeles": "4 Crossback",
+		"Type":"XL"
+	},
+	{
+		"Marques": "DS",
+		"Modeles": "5",
+		"Type":"XL"
+	},
+	{
+		"Marques": "DS",
+		"Modeles": "7",
+		"Type":"XXL"
+	},
+	{
+		"Marques": "DS",
+		"Modeles": "7 Crossback",
+		"Type":"XXL"
+	},
+	{
+		"Marques": "DACIA",
+		"Modeles": "Sandero",
+		"Type":"M"
+	},
+	{
+		"Marques": "DACIA",
+		"Modeles": "Duster",
+		"Type":"XL"
+	},
+	{
+		"Marques": "DACIA",
+		"Modeles": "Lodgy",
+		"Type":"XXL"
+	},
+	{
+		"Marques": "DACIA",
+		"Modeles": "Logan",
+		"Type":"L"
+	},
+	{
+		"Marques": "DACIA",
+		"Modeles": "Logan MCV",
+		"Type":"XL"
+	},
+	{
+		"Marques": "DACIA",
+		"Modeles": "Dokker",
+		"Type":"XL"
+	}
+]

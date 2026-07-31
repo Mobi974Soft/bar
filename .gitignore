@@ -4,3 +4,10 @@ DBConfig.php
 /login/dbconfig.php
 /tickets/ticket.txt
 ticket_total_caisse.txt
+/vendor/
+/webshim/
+/admind_old/
+/.vscode/
+/journaux/
+/garde/
+/lib/

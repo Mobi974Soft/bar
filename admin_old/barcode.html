@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<svg class="barcode"
+     jsbarcode-format="upc"
+     jsbarcode-value="123456789011"
+     jsbarcode-textmargin="0"
+     jsbarcode-fontoptions="bold">
+</svg>
+
+
+<script src="../lib/dist/JsBarcode.ean-upc.min.js"></script>
+<script>
+    JsBarcode(".barcode").init();
+</script>
+</body>
+</html>

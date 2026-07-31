@@ -12,13 +12,15 @@ if(isset($postdata)){
     $idcaisse = $request->idcaisse;
     if (isset($_SESSION['id'],$_SESSION['client_id'])){
         $user_id = $_SESSION['id'];
-        $sql = "INSERT INTO id_caisse_used(id_caisse,status,user_id) VALUES($idcaisse,1,$user_id)";
+        $client_id = $_SESSION['client_id'];
+        $sql = "INSERT INTO id_caisse_used(id_caisse,status,user_id,client_id) VALUES($idcaisse,1,$user_id,$client_id)";
         $query = $con->query($sql);
+
         if($query){
             $_SESSION['id_caisse'] = $idcaisse;
             $_SESSION['session'] = 1;
-            echo json_encode(array('response' => 1, 'session' => $_SESSION));
-            die();
+            $type=2;
+            echo json_encode(array('response' => 1, 'session' => $_SESSION,"type"=>$type));
         }
     }
 

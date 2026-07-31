@@ -23,7 +23,7 @@ if (isset($postdata)) {
         $qte = 1;
         $titre = $request->article->titre;
         $date = time();
-        // $id_caisse = $request->id_caisse;
+        $id_caisse = $request->id_caisse;
         $session = "1";
         $retour = 'false';
 
@@ -35,7 +35,7 @@ if (isset($postdata)) {
         $panier = $conn->query($sql)->fetch_assoc();
 
         if ($panier == null) {
-            $sql = "INSERT INTO table_client_panier (`session`,`id_produit`, `ref`, `qte`, `credit`, `pu_euro`, `promo`, `retour`, `famille`, `titre`, `taux_tva`,`date`, `remise`) VALUES ('" . $session . "','" . $id_produit . "' ,'" . $ref . "', $qte, 0 , $pu_euro, 0, $retour ,0,'" . $titre . "',$taux_tva,$date, $remise)";
+            $sql = "INSERT INTO table_client_panier (`session`,`id_produit`, `ref`, `qte`, `credit`, `pu_euro`, `promo`, `retour`, `famille`, `titre`, `taux_tva`,`date`, `remise`, `id_caisse`, `idtable`) VALUES ('" . $session . "','" . $id_produit . "' ,'" . $ref . "', $qte, 0 , $pu_euro, 0, $retour ,0,'" . $titre . "',$taux_tva,$date, $remise, $id_caisse, $session)";
             $conn->query($sql);
         } else {
             $sql = "UPDATE table_client_panier SET qte= qte + 1 WHERE ref=" . $panier['ref'];
@@ -50,7 +50,7 @@ if (isset($postdata)) {
         $session = $request->session;
         $id_produit = "#DIVERS";
         $id_caisse = $request->idcaisse;
-        $counter = mysqli_query($conn, "SELECT count FROM table_counter WHERE type = 'produit_divers'");
+        $counter = mysqli_query($conn, "SELECT count FROM table_counter WHERE type = 'jiji'");
         $row = $counter->fetch_row();
         $count = $row[0];
         $ref = 'articleinconnu' . $ref_inconnu . $count;
@@ -59,22 +59,26 @@ if (isset($postdata)) {
         $pu_euro = $request->articleDivers;
         $tva = $request->tvaDivers;
         $qte = $request->qteDivers;
-        $taux_tva = ($tva == 8 ? 8.5 : ($tva == 2 ? 2.1 : ($tva == 1 ? 1.05 : 0)));
         $remise = 0;
         $remise_euro = 0;
         $titre = "Divers";
         $famille = 14;
         $date = time();
         $retour = 'false';
+        $prixttc_promo_euro=0;
 
         $sql = "INSERT INTO table_client_panier 
-    (`session`,`id_produit`,`ref`, `qte`, `id_caisse`, `pu_euro`, `remise_euro`, `retour`, `famille`, `titre`, `taux_tva`,`date`, `remise`) 
-    VALUES ( $session,'$id_produit' ,'$ref', $qte,  $id_caisse ,$pu_euro, $remise_euro, 'false' ,$famille,'$titre',$taux_tva,$date, $remise)";
+    ( `id_caisse`, `id_produit`, `session`, `ref`, `qte`, `pu_euro`, `remise_euro`, `retour`,  `titre`, `taux_tva`, `date`, `remise`, `famille`, `idtable`,  `en_cuisine`,  `options`) 
+    VALUES ( $id_caisse,'$id_produit',$session ,'$ref', $qte, $pu_euro, $remise_euro, 'false' ,'$titre',8.5,$date,0,$famille,$session,0, 1)";
         $insertDivers = $conn->query($sql);
         if ($insertDivers) {
             $conn->query("UPDATE table_counter SET count = count + 1 WHERE type = 'produit_divers'");
             $json = regenerePanier($conn, "SELECT * FROM table_client_panier", 'jsons/panier.json');
-            echo json_encode(array('response' => 1, 'json' => $json));
+            $calculTotal = calculTotal($conn,$session,$id_caisse);
+            $total = $calculTotal[0];
+            $qteTotal = $calculTotal[1];
+            $data = array('titre' => $titre, 'pu_euro' => $pu_euro, 'remise' => $remise, 'remise_euro' => $remise_euro, 'session' => $session,  'ref' => $ref, "qte" => $qte, "promo" => $prixttc_promo_euro);
+            echo json_encode(array('response' => 1, 'data' => $data,'total' => $total,'qteTotal'=>$qteTotal));
             die();
         }
     }
@@ -88,7 +92,7 @@ if (isset($postdata)) {
         $date = time();
         $sql = "INSERT INTO table_client_panier 
     (`session`,`id_produit`,`ref`, `qte`, `id_caisse`, `pu_euro`, `remise_euro`, `retour`, `famille`, `titre`, `taux_tva`,`date`, `remise`) 
-    VALUES ( $session,'remise','remise',1,  $id_caisse ,$montant, 0, 'true' ,0,'$titre',0,$date, 0)";
+    VALUES ( $session,'remise','remise',1,  $id_caisse ,$montant, 0, 'true' ,0,'$titre',8.5,$date, 0)";
         $insertRemisePanier = $conn->query($sql);
         if ($insertRemisePanier) {
             $json = regenerePanier($conn, "SELECT * FROM table_client_panier", 'jsons/panier.json');
@@ -120,6 +124,7 @@ if (isset($postdata)) {
                     $id_produit = $newRetour['id'];
                     $qte = 1;
                     $pu_euro = $newRetour['prixttc_euro'];
+                    $promo = $newRetour['prixttc_promo_euro'];
                     $remise_euro = 0;
                     $famille = $newRetour['cath'];
                     $tva = $newRetour['code_tva'];
@@ -127,8 +132,8 @@ if (isset($postdata)) {
                     $date = time();
                     $remise = 0;
                     $titre = 'RET ART: ' . $newRetour['titre'];
-                    $sql = "INSERT INTO table_client_panier (`session`,`id_produit`,`ref`, `qte`, `id_caisse`, `pu_euro`, `remise_euro`, `retour`, `famille`, `titre`, `taux_tva`,`date`, `remise`) 
-                VALUES ($session,'$id_produit' ,'$ref', $qte, $id_caisse , $pu_euro, $remise_euro, $retour ,$famille,'$titre',$taux_tva,$date, $remise)";
+                    $sql = "INSERT INTO table_client_panier (`session`,`id_produit`,`ref`, `qte`, `id_caisse`, `pu_euro`, `remise_euro`, `retour`,`promo`, `famille`, `titre`, `taux_tva`,`date`, `remise`) 
+                VALUES ($session,'$id_produit' ,'$ref', $qte, $id_caisse , $pu_euro, $remise_euro, $retour ,$promo,$famille,'$titre',$taux_tva,$date, $remise)";
                     $newRetourArticle = $conn->query($sql);
                     if ($newRetourArticle) {
                         $json = regenerePanier($conn, "SELECT * FROM table_client_panier", 'jsons/panier.json');
@@ -149,8 +154,8 @@ if (isset($postdata)) {
             $remise = $remise_euro = 0;
             $famille = 14;
             $date = time();
-            $sql = "INSERT INTO table_client_panier (`session`,`id_produit`,`ref`, `qte`, `id_caisse`, `pu_euro`, `remise_euro`, `retour`, `famille`, `titre`, `taux_tva`,`date`, `remise`) 
-                VALUES ($session,'$id_produit' ,$ref, $qte, $id_caisse , $pu_euro, $remise_euro, $retour ,$famille,'$titre',$taux_tva,$date, $remise)";
+            $sql = "INSERT INTO table_client_panier (`session`,`id_produit`,`ref`, `qte`, `id_caisse`, `pu_euro`, `remise_euro`, `retour`, `promo`,`famille`, `titre`, `taux_tva`,`date`, `remise`) 
+                VALUES ($session,'$id_produit' ,$ref, $qte, $id_caisse , $pu_euro, $remise_euro, $retour ,0,$famille,'$titre',$taux_tva,$date, $remise)";
             $newRetourDivers = $conn->query($sql);
             if ($newRetourDivers) {
                 $json = regenerePanier($conn, "SELECT * FROM table_client_panier", 'jsons/panier.json');
@@ -191,7 +196,7 @@ if (isset($postdata)) {
         $ref = $request->refRemise;
         $session = $request->session;
         $id_caisse = $request->id_caisse;
-        $sql = "UPDATE table_client_panier SET remise = $remise WHERE ref = $ref AND session = $session AND id_caisse = $id_caisse";
+        $sql = "UPDATE table_client_panier SET remise = $remise WHERE ref = '$ref' AND session = $session AND id_caisse = $id_caisse";
         $ajoutRemise = $conn->query($sql);
         if ($ajoutRemise) {
             echo $remise;
@@ -205,7 +210,7 @@ if (isset($postdata)) {
         $ref = $request->refRemiseEuro;
         $session = $request->session;
         $id_caisse = $request->id_caisse;
-        $sql = "UPDATE table_client_panier SET remise_euro = $remise_euro WHERE ref = $ref AND session = $session AND id_caisse = $id_caisse";
+        $sql = "UPDATE table_client_panier SET remise_euro = $remise_euro WHERE ref = '$ref' AND session = $session AND id_caisse = $id_caisse";
         $ajoutRemiseEuro = $conn->query($sql);
         if ($ajoutRemiseEuro) {
             echo $remise_euro;
@@ -218,7 +223,8 @@ if (isset($postdata)) {
         $qte = $request->updateQTE;
         $ref = $request->refQte;
         $session = $request->session;
-        $sql = "UPDATE table_client_panier SET qte = $qte WHERE ref = $ref AND session = $session";
+        $timestamp = time();
+        $sql = "UPDATE table_client_panier SET qte = $qte, date = '$timestamp' WHERE ref = '$ref' AND session = $session";
         $updateQte = $conn->query($sql);
         if ($updateQte) {
             echo $qte;
@@ -236,11 +242,11 @@ if (isset($postdata)) {
             $date = time();
             $sql = "INSERT INTO table_client_panier
     (`session`,`id_produit`,`ref`, `qte`, `credit`, `pu_euro`, `promo`, `retour`, `famille`, `titre`, `taux_tva`,`date`, `remise`)
-	VALUES ($session,
-	        '#promo',
-	        '0007',
-	        1, 0 ,
-	        $montant_promo, 0, 'false',0,'" . $titre . "',0,'" . $date . "', 0)";
+    VALUES ($session,
+            '#promo',
+            '0007',
+            1, 0 ,
+            $montant_promo, 0, 'false',0,'" . $titre . "',8.5,'" . $date . "', 0)";
             $ajoutPromo = $conn->query($sql);
             if ($ajoutPromo) {
                 $json = regenerePanier($conn, "SELECT * FROM table_client_panier", 'jsons/panier.json');

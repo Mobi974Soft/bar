@@ -10,13 +10,14 @@ include 'functions.php';
 
 if(isset($_POST['ajoutArticle'])){
 
+    $stock = $_POST['newStock'];
     $famille =$_POST['famille'];
     $gencode =$_POST['newRef'];
     $designation = $_POST['ajoutArticle'];
-    $taux_tva = (int) $_POST['newTauxTva'];
+    $taux_tva = $_POST['newTauxTva'];
     $codetva = ($taux_tva == "8.5" ? 8 : ($taux_tva == "2.1" ? 2  : ($taux_tva == "1.05" ? 1 : 0)));
     $quantite = (float)$_POST['newQte'];
-    $prix = (int) $_POST['newPu'];
+    $prix = (float) $_POST['newPu'];
     $promottc =  $_POST['newPromo'];
 
     if($designation == ""){
@@ -44,7 +45,7 @@ if(isset($_POST['ajoutArticle'])){
 
 
     $sql = "INSERT INTO table_client_catalogue(`cath`,`id`,`ref`,`titre`,`prixttc_euro`,`prixttc_promo_euro`,`code_tva`,`promo_debut`,`promo_fin`,`choix_mode_prix`,`mode_prix_1_achat_ht`,`mode_prix_1_marge`,`mode_prix_2_fixe_ht`,`mode_prix_3_fixe_ttc`,`dateajout`,`datemodif`,`accueil`,`stock`,`stock_alerte`,`unite`,`qte_unite`,`package`,`prix_variable`,`img`,`send_web`) 
-	VALUES($famille,'$id_produit','$gencode','$designation',$prix,$promottc,$codetva,'1000-01-01 00:00:00','1000-01-01 00:00:00',$mode,'0.00','30.00',0,0,'$dateajout','1000-01-01 00:00:00',0,99,'-99',0,$quantite,'',0,'',1)";
+	VALUES($famille,'$id_produit','$gencode','$designation',$prix,$promottc,$codetva,'1000-01-01 00:00:00','1000-01-01 00:00:00',$mode,'0.00','30.00',0,0,'$dateajout','1000-01-01 00:00:00',0,$stock,'-99',0,$quantite,'',0,'',1)";
     $insert_article = $conn->query($sql);
 
     if($insert_article){

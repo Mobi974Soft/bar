@@ -16,7 +16,7 @@ $today_end_ok = mktime(20,30,0,date("m"),date("d"),date("Y"));
 /*init 1*/
 $nowY = date("Y");
 $nowM = date("n");
-$fichier = "C:/xampp/htdocs/caisse-backend/pass-mareux.php";
+$fichier = "C:/xampp/htdocs/restaurant/pass-mareux.php";
 $handle = fopen("$fichier","r");
 $content = fread($handle,filesize($fichier));
 fclose($handle);
@@ -51,10 +51,10 @@ $today_end = mktime(23,0,0,date("m"),date("d"),date("Y"));
 
 
 //--partie synchro caisse et server
-//include "C:/xampp/htdocs/caisse-backend/pass-mareux.php";
-include "C:/xampp/htdocs/caisse-backend/parametre.php";
-include "C:/xampp/htdocs/caisse-backend/functions.php";
-include "C:/xampp/htdocs/caisse-backend/DBConfig.php";
+//include "C:/xampp/htdocs/restaurant/pass-mareux.php";
+include "C:/xampp/htdocs/restaurant/parametre.php";
+include "C:/xampp/htdocs/restaurant/functions.php";
+include "C:/xampp/htdocs/restaurant/DBConfig.php";
 
 //if($ip_serveur == "localhost") {
 //	echo "ne pas lancer sur le serveur\n";

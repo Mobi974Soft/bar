@@ -1,0 +1,79 @@
+<?php 
+
+$imprimantes_ticket = "EPSON_TM-T88VI";
+$nbcaisse = 3;
+$magasin = "C'IDEAL Magasin Art Discount";
+$adresse = "Chemin LEFAGUYES La Cocoteraie BAT 3";
+$adresse2 = "97440 SAINT ANDRE";
+$numero_telephone = "0262 50 18 18";
+$siret = "49205116400019";
+
+// REGLAGE ETIQUETTE POUR PRIX AVEC ENTIER 2CHIFFRE (Pour 3 & 1 se repositionnera automatiquement)
+// Titre produit
+$posXtitre = "20";
+$posYtitre = "0";
+// Titre produit
+$posXpackage = "23";
+$posYpackage = "38";
+// codebarre
+$posXbarcode = "35";
+$posYbarcode = "110";
+//prix entier
+$posXprixEntier = "255";
+$posYprixEntier = "90";
+//prix decimal
+$posXprixDecimal = "340";
+$posYprixDecimal = "137";
+// symbole euro
+$posXeuro = "315";
+$posYeuro = "92";
+
+// PROMO
+// Barre promo
+$posXbarrePromo = "275";
+$posYbarrePromo = "150";
+// Date promo fin
+$posXpromofin = "30";
+$posYpromofin = "80";
+
+
+// promo nouveau prix
+$posXnouveauPrixEntier = "295";
+$posYnouveauPrixEntier = "48";
+// promo nouveau prix decimal
+$posXnouveauPrixDecimal = "342";
+$posYnouveauPrixDecimal = "92";
+
+// euro nouveau prix promo
+$posXnouveaueuropromo = "320";
+$posYnouveaueuropromo = "55";
+
+// promo ancien prix
+$posXancienPrixEntier = "280";
+$posYancienPrixEntier = "155";
+// promo ancien prix decimal
+$posXancienPrixDecimal = "340";
+$posYancienPrixDecimal = "160";
+//symbol euro promo
+$posXeuropromo = "365";
+$posYeuropromo = "164";
+
+
+$arrayPos = array(
+    "titre"=>array($posXtitre,$posYtitre),
+    "package"=>array($posXpackage,$posYpackage),
+    "codebarre"=>array($posXbarcode,$posYbarcode),
+    "prixEntier"=>array($posXprixEntier,$posYprixEntier),
+    "prixDecimal"=>array($posXprixDecimal,$posYprixDecimal),
+    "euro"=>array($posXeuro,$posYeuro),
+    "barre_promo"=>array($posXbarrePromo,$posYbarrePromo),
+    "promoAncienPrix"=>array($posXancienPrixEntier,$posYancienPrixEntier),
+    "promoAncienDecimal"=>array($posXancienPrixDecimal,$posYancienPrixDecimal),
+    "euroPromo"=>array($posXeuropromo,$posYeuropromo),
+    'promoFin'=>array($posXpromofin,$posYpromofin),
+    "nouveauPrixEntier"=>array($posXnouveauPrixEntier,$posYnouveauPrixEntier),
+    "nouveauPrixDecimal"=>array($posXnouveauPrixDecimal,$posYnouveauPrixDecimal),
+    "nouveauPrixEuro"=>array($posXnouveaueuropromo,$posYnouveaueuropromo)
+);
+
+ ?>

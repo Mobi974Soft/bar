@@ -1,108 +1,499 @@
-
-
-.hide-replaced.ws-inputreplace {
-    display: none !important;
+/*CATEGORIE */
+.alphabet{
+    font-weight: 800;
+background-color: yellow;
 }
-
+.bodyCaisse{
+background-color: rgb(242, 242, 242);
+margin: 0;
+height: 100%;
+width: 100%;
+overflow: hidden;
+}
+#produits{
+height: 800px;
+padding-bottom: 30px;
+}
+.blockCloture{
+    padding: 100px;
+}
+.btnRaccourci{
+height: 70px;
+cursor: pointer;
+background-color: steelblue !important;
+display: table; 
+/*    border: 1px solid gray;*/
+border-radius: 5px;
+color:#fff;
+margin-top: 10px;
+}
+.btnRaccourci p {
+text-align:center; 
+vertical-align: middle;
+display: table-cell;  
+}
+.btnRaccourci:hover{
+opacity: 0.7;
+}
+.active{
+background-color:#46dcff;
+padding:1rem !important;
+margin: 10px 5px !important;
+}
+.active > div > div > .designation {
+font-size: 20px !important; 
+}
+.active > div > div > .puEuroProduit{
+font-size:24px;
+}
+.active > div > div > .qteProduit,.active > div > div > p > .inputRemise,.active > div > div > .inputRemise {
+font-size: 24px !important;
+}
+#paiementMultiple{
+display: none;
+}
+.panierGrid{
+padding: 30px;
+}
+.hide-replaced.ws-inputreplace {
+display: none !important;
+}
+.totalQte{
+color:red;
+font-weight:600;
+font-size:22px;
+}
+.menusBottom{
+display: none;
+}
 .form-row {
-    padding: 5px 10px;
-    margin: 5px 0;
+padding: 5px 10px;
+margin: 5px 0;
 }
 .form-row input {
-    width: 220px;
-    padding: 3px 1px;
-    border: 1px solid #ccc;
-    box-shadow: none;
+width: 220px;
+padding: 3px 1px;
+border: 1px solid #ccc;
+box-shadow: none;
 }
 
 .euro{
-    font-size:20px;
-    font-weight: 600;
-    margin-left: 10px;
+font-size:20px;
+font-weight: 600;
+margin-left: 10px;
 }
-th,td {
-    text-align: center;
+th,td,.entete,.puEuroProduit,.inputRemise,.remisePourcent{
+text-align: center;
+}
+.remiseEuro{
+text-align:right;
 }
 
 /*Etiquette style*/
 .etiquette {
-    display: none;
-    /*text-align: center;*/
+display: none;
+/*text-align: center;*/
 }
 
 @media print {
-    .content-wrapper,footer{
-        display: none;
-    }
-    @page { size: auto;  margin: 0mm; }
-    .etiquette {
-        display: block;
-        text-align: center;
-    }
-    svg{
-        position: absolute;
-        bottom: -15px;
-        left:-5px;
+.content-wrapper,footer{
+    display: none;
+}
+@page { size: auto;  margin: 0mm; }
+.etiquette {
+    display: block;
+    text-align: center;
+}
+svg{
+    position: absolute;
+    bottom: 0px;
+    left:0px;
 
-    }
-    .title{
-        position: absolute;
-        top: 0px;
-        left: 5px;
-        margin-top:1px;
-        font-weight: 800;
-        font-size: 22px;
-        text-transform: uppercase;
-        font-family: 'Tahoma';
-        letter-spacing: 0;
-    }
-    .price{
-        position: absolute;
-        top: 20px;
-        left: 20%;
-        margin-top: 0px;
-        margin-left: 20px;
-        font-weight: 800;
-        font-size: 60px;
-    }
-    .price span{
-        font-size: 22px;
-        font-weight: 600;
-    }
+}
+.title{
+    position: absolute;
+    top: -15px;
+    left: 10px;
+    font-weight: 800;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0;
+}
+#colisage{
+    position: absolute;
+    top: -20px;
+    left: 10px;
+    font-weight: 800;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0;
+}
+.price{
+    position: absolute;
+    top: 0px;
+    left: 18%;
+    margin-top: 0px;
+    font-weight: 800;
+    font-size: 60px;
+}
+.price span{
+    font-size: 22px;
+    font-weight: 600;
+}
 
 
 }
 /*Fin etiquette style*/
 hr {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    border: 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+margin-top: 1rem;
+margin-bottom: 1rem;
+border: 0;
+border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
-    background-color: steelblue !important;
+background-color: steelblue !important;
 }
 
 .btnCaisse{
-    padding:20px 0 ;
-    margin-bottom: 15px;
+padding:15px 0 ;
+margin-bottom: 5px;
 }
 
 .modal-body{
-    padding-bottom: 30px;
+padding-bottom: 30px;
 }
 .text-paiement{
-    padding-bottom: 20px;
+padding-bottom: 20px;
 }
 .btnPaiement{
-    margin-left: 15px;
-    width: 100px;
+margin-left: 15px;
+width: 100px;
 }
 .resteAPayer{
-    font-weight: 600;
-    font-size: 24px;
+font-weight: 600;
+font-size: 24px;
 }
+
 .remise-caddie{
-    font-style: italic;
+font-style: italic;
+}
+
+.totalCaddie{
+padding: 0 10px;
+}
+.enteteCaddie{
+margin:15px 30px 0 30px;
+}
+.produit {
+margin: 3px 5px 0 5px;
+padding: 5px 10px;
+}
+.designation{
+font-size:17px;
+font-weight:600;
+}
+.qteProduit{
+font-size: 18px;
+width: 40px !important;
+color: red;
+font-weight: 800;
+}
+.puEuroProduit{
+font-size:20px;
+}
+.inputRemise{
+font-size: 18px;
+width: 40px !important;
+}
+.titreTotal{
+font-family: 'Tahoma' ;
+font-weight: 600;
+}
+.montant_total{
+font-size: 50px;
+font-weight:800;
+font-family: 'Tahoma';
+}
+.caddie{
+font-size: 25px;
+}
+.caisseNumber{
+margin-top: 30px;
+font-size: 22px ;
+border-bottom: solid;
+border-color: #fff;
+border-width: 1px;
+padding-bottom: 25px;
+}
+@media screen and (max-width: 1366px) and (max-height:768px) {
+.totalCaddie{
+    padding: 0 5px;
+    /*margin-left: 50px;*/
+}
+#produits{
+height: 500px;
+padding-bottom: 5px;
+}
+.enteteQte{
+    padding: 0;
+}
+.blockCloture{
+    padding: 0;
+}
+.panierGrid{
+    padding: 15px;
+}
+.btnLeft{
+    padding: 0 0 0 5px;
+}
+.btnRight{
+    padding: 0 5px 0 2px;
+}
+.callout.callout-info{
+    overflow: hidden !important;
+}
+.active{
+    background-color:#46dcff;
+    padding: 9px 5px !important;
+    margin: 0 2px 4px 0 !important;
+}
+.active > div > div > .qteProduit,.active > div > div > p > .inputRemise,.active > div > div > .inputRemise {
+    font-size: 20px !important;
+}
+.active > div > div > .designation {
+    font-size: 15px !important; 
+}
+.active > div > div > .puEuroProduit{
+    font-size:18px;
+}
+.enteteRemise{
+    padding: 0;
+}
+.remisePourcent{
+    padding: 0;
+}
+
+.enteteCaddie{
+    margin:15px 5px 0 5px;
+    align-items: end;
+}
+.produit {
+    margin:0;
+    padding: 7px;
+}
+.designation{
+    font-size:12px;font-weight:600;
+}
+.qteProduit{
+    text-align:center;
+    font-size: 13px;
+    color: red;
+    font-weight: 800;
+    margin-right: 15px;
+}
+.qteBox{
+    text-align: center;
+}
+.puEuroProduit{
+    font-size:15px;
+}
+.puEuroProduitUnique{
+    text-align: center;
+}
+.inputRemise{
+    font-size:12px;
+    text-align: center;
+}
+
+.remiseEuro{
+    padding: 0;
+    text-align: left;
+}
+.entete{
+    font-size: 13px;
+    margin-bottom:5px;
+    /*text-align: center;*/
+}
+.btnCaisse{
+    padding:18px ;
+    margin-bottom: 5px;
+    font-size:16px;
+}
+.titreTotal{
+   font-size: 16px !important;
+}
+.totalQte{
+color:red;
+font-weight:600;
+font-size:13px;
+}
+.montant_total{
+font-size: 36px;
+font-weight:800;
+font-family: 'Tahoma';
+}
+.caddie{
+font-size: 20px;
+
+}
+.caisseNumber{
+font-size: 15px;
+}
+.card-body{
+padding:2px 5px!important;
+}
+.btnCol{
+padding:3px;
+}
+.menus{
+margin-right: -4px;
+display: none;
+}
+.menusBottom{
+display: flex;
+position: absolute;
+bottom: 0;
+width: 100%;
+}
+.borderBtn{
+border-right: 1px solid white;
+display: table;
+}
+
+}
+@media only screen and (max-width: 1024px)  {
+.totalCaddie{
+    padding: 0 5px;
+}
+#produits{
+height: 500px;
+padding-bottom: 5px;
+}
+.enteteQte{
+    padding: 0;
+}
+.blockCloture{
+    padding: 0;
+}
+.panierGrid{
+    padding: 15px;
+}
+.btnLeft{
+    padding: 0 0 0 5px;
+}
+.btnRight{
+    padding: 0 5px 0 2px;
+}
+.callout.callout-info{
+    overflow: hidden !important;
+}
+.active{
+    background-color:#46dcff;
+    padding: 9px 5px !important;
+    margin: 0 2px 4px 0 !important;
+}
+.active > div > div > .qteProduit,.active > div > div > p > .inputRemise,.active > div > div > .inputRemise {
+    font-size: 20px !important;
+}
+.active > div > div > .designation {
+    font-size: 15px !important; 
+}
+.active > div > div > .puEuroProduit{
+    font-size:18px;
+}
+.enteteRemise{
+    padding: 0;
+}
+.remisePourcent{
+    padding: 0;
+}
+
+.enteteCaddie{
+    margin:15px 5px 0 5px;
+    align-items: end;
+}
+.produit {
+    margin:0;
+    padding: 7px;
+}
+.designation{
+    font-size:12px;font-weight:600;
+}
+.qteProduit{
+    text-align:center;
+    font-size: 13px;
+    color: red;
+    font-weight: 800;
+    margin-right: 15px;
+}
+.qteBox{
+    text-align: center;
+}
+.puEuroProduit{
+    font-size:15px;
+}
+.puEuroProduitUnique{
+    text-align: center;
+}
+.inputRemise{
+    font-size:12px;
+    text-align: center;
+}
+
+.remiseEuro{
+    padding: 0;
+    text-align: left;
+}
+
+.entete{
+    font-size: 13px;
+    margin-bottom:5px;
+    /*text-align: center;*/
+}
+.btnCaisse{
+    padding:10px 0 ;
+    margin-bottom: 5px;
+    font-size:13px;
+}
+.titreTotal{
+   font-size: 16px !important;
+}
+.totalQte{
+color:red;
+font-weight:600;
+font-size:13px;
+}
+.montant_total{
+font-size: 36px;
+font-weight:800;
+font-family: 'Tahoma';
+}
+.caddie{
+font-size: 20px;
+
+}
+.caisseNumber{
+font-size: 15px;
+}
+.card-body{
+padding:2px 5px!important;
+}
+.btnCol{
+padding:3px;
+}
+.menus{
+margin-right: -4px;
+display: none;
+}
+.menusBottom{
+display: flex;
+position: absolute;
+bottom: 0;
+width: 100%;
+}
+.borderBtn{
+border-right: 1px solid white;
+/*    margin: auto;*/
+}
 }

@@ -15,7 +15,12 @@ if (!isset($_POST['password'])) {
             $stmt->fetch();
             if ($password_entry == $password) {
                 session_regenerate_id();
-                $_SESSION['loggedin'] = TRUE;
+                
+                if ($role != "caisse") {
+                   $_SESSION['loggedinAdmin'] = TRUE;
+                }else{
+                    $_SESSION['loggedin'] = TRUE;
+                }
                 $_SESSION['id'] = $id;
                 $_SESSION['client_id'] = $client_id;
                 $_SESSION['user_id'] = $id;

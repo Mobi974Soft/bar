@@ -10,12 +10,12 @@ if (isset($_POST['creerFamille'])) {
 	if ($nbligne == 0) {
 		$insert = $conn->query("INSERT INTO table_client_categorie(nomcategorie,branche,id_parent) VALUES ('$famille',0,0) ");
 		if ($insert) {
-            $last_id = $conn->insert_id;
-            $sql = "UPDATE table_client_categorie SET id_categorie=$last_id WHERE id = $last_id";
-            $setCategorie = $conn->query($sql);
-            if($setCategorie){
-                echo json_encode(array('response' => 1, 'message' => 'La famille '. $famille .' a bien été créer ! '));
-            }
+			$last_id = $conn->insert_id;
+			$sql = "UPDATE table_client_categorie SET id_categorie=$last_id WHERE id = $last_id";
+			$setCategorie = $conn->query($sql);
+			if($setCategorie){
+				echo json_encode(array('response' => 1, 'message' => 'La famille '. $famille .' a bien été créer ! '));
+			}
 		}
 	} else {
 		echo json_encode(array('response' => 0, 'message' => 'Cette famille existe déjà !'));
@@ -26,10 +26,11 @@ if(isset($_POST['famille']) && isset($_POST['designation'])){
 	$famille = $_POST['famille'];
 	$gencode = htmlspecialchars($_POST['gencode']);
 	$designation = htmlspecialchars($_POST['designation']);
+	
 	$stock_actuel = (int) htmlspecialchars($_POST['stock_actuel']);
 	$stock_alerte = (int) htmlspecialchars($_POST['stock_alerte']);
 	$codetva = $_POST['codetva'];
-	$colisage =$_POST['colisage']  ;
+	$package =$_POST['package']  ;
 	$quantite = (float) htmlspecialchars($_POST['quantite']);
 	$unite = $_POST['unite'];
 	$prix_variable = $_POST['prix_variable'];
@@ -66,7 +67,7 @@ if(isset($_POST['famille']) && isset($_POST['designation'])){
 		}
 	}
 	if ($mode == 1) {
-		if($mode_prix_1 == 0 or $mode_prix_1 == '' ){
+		if($mode_prix_1_achat == 0 or $mode_prix_1_achat == '' ){
 			echo json_encode(array('response'=>3,'message' => 'Vous devez indiquer un prix', 'type' => 'mode_prix_1_achat_ht' ));
 			exit;
 		}
@@ -74,14 +75,19 @@ if(isset($_POST['famille']) && isset($_POST['designation'])){
 	
 
 	include('../functions.php');
-
+	$designation = remove_accents($designation);
 	$id_produit = random_strings(12);
 
 	$sql = "INSERT INTO table_client_catalogue(`cath`,`id`,`ref`,`titre`,`prixttc_euro`,`prixttc_promo_euro`,`code_tva`,`promo_debut`,`promo_fin`,`choix_mode_prix`,`mode_prix_1_achat_ht`,`mode_prix_1_marge`,`mode_prix_2_fixe_ht`,`mode_prix_3_fixe_ttc`,`dateajout`,`datemodif`,`accueil`,`stock`,`stock_alerte`,`unite`,`qte_unite`,`package`,`prix_variable`,`img`,`send_web`) 
-	VALUES($famille,'$id_produit','$gencode','$designation',$prix,$promottc,$codetva,'$promo_debut','$promo_fin',$mode,$mode_prix_1_achat,$marge,$mode_prix_2,$mode_prix_3,'$dateajout','1000-01-01 00:00:00',0,$stock_actuel,$stock_alerte,$unite,$quantite,'',$prix_variable,'',1)";
-	if ($conn->query($sql) == TRUE) {
-		echo json_encode(array('response' => 1, 'message' => 'Nouvel article enregistré !' , 'prix' => $prix ));
-		exit;
+	VALUES($famille,'$id_produit','$gencode','$designation',$prix,$promottc,$codetva,'$promo_debut','$promo_fin',$mode,$mode_prix_1_achat,$marge,$mode_prix_2,$mode_prix_3,'$dateajout','1000-01-01 00:00:00',0,$stock_actuel,$stock_alerte,$unite,$quantite,'$package',$prix_variable,'',1)";
+	$ajoutArticle = $conn->query($sql);
+	if ($ajoutArticle) {
+		$sql = "UPDATE table_client_variable SET modif_serveur_ajout_catalogue = '$dateajout' WHERE num = 1";
+		$updateSync = $conn->query($sql);
+		if($updateSync){
+			echo json_encode(array('response' => 1, 'message' => 'Nouvel article enregistré !' , 'prix' => $prix ));
+			exit;
+		}
 	}
 	else{
 		echo json_encode(array('response' => 2, 'message' => 'Une erreur c\'est produite.' , 'prix' => $sql ));
@@ -110,14 +116,71 @@ $barcode = $_GET['gencode'];
 
 
 ?>
+<style>
+	@media print {
+		.content-wrapper, footer {
+			display: none;
+		}
 
+		@page {
+			size: auto;
+			margin: 0mm;
+		}
+
+		.etiquette {
+			display: block;
+			text-align: center;
+		}
+
+		svg {
+			position: absolute;
+			bottom: -5px;
+			left: 10px;
+		}
+
+		.title {
+			position: absolute;
+			top: 0px;
+			left: 14px;
+			margin-top: 1px;
+			font-weight: 800;
+			font-size: 22px;
+			text-transform: uppercase;
+			font-family: "Tahoma";
+			letter-spacing: -2px;
+		}
+
+		.price {
+			position: absolute;
+			top: 25%;
+			left:23%;
+			margin-top: 0px;
+			margin-left: 0px;
+			font-weight: 800;
+			font-size: 80px;
+
+			font-family: "PT Sans monospace";
+			letter-spacing: -5px;
+		}
+
+		.price span {
+			font-size: 30px;
+			letter-spacing: -2px;
+			font-weight: 600;
+			font-family: "Open Sans monospace";
+		}
+
+
+	}
+</style>
 <!--Etiquette template-->
-<div class="etiquette" style="width: 500px;height: 300px;margin: auto">
-    <div>
-        <p id="titleEtiquette" class="title"></p>
-        <p id="prixEntier" class="price"><span id="prixDecimal"></span></p>
-        <svg id="barcode2" jsbarcode-textmargin="1"></svg>
-    </div>
+<div class="etiquette" style="width: 200px;height: 140px;margin: auto">
+	<div>
+		<p id="titleEtiquette" class="title"></p>
+		<p id="colisage"></p>
+		<p id="prixEntier" class="price"><span id="prixDecimal"></span></p>
+		<svg id="barcode2" jsbarcode-textmargin="1"></svg>
+	</div>
 
 </div>
 <!--Fin etiquette template -->
@@ -139,42 +202,99 @@ $barcode = $_GET['gencode'];
 								<div class="form-group row">
 									<label class="col-lg-3 col-form-label form-control-label">Famille</label>
 									<div class="col-lg-9" id="famille-select">
-										<select class="form-control" id="famille" size="0" name="famille">
-											<option value="0">Choisir la famille</option>
-											<?php
-											$sql = 'SELECT * FROM table_client_categorie ORDER BY id ASC';
-											$familles = $conn->query($sql);
-											$nbligne = $familles->num_rows;
-											$parent = [];
-											$child = [];
-											if ($nbligne > 0) {
-												while ($famille = $familles->fetch_assoc()) {
-													if ($famille['id_parent'] == 0) {
-														$parent[] = $famille;
-													} else {
-														$child[] = $famille;
-													}
-												}
-											}
-											foreach ($parent as $cat) {
-												?>
-												<option class="optionGroup" value="<?php echo $cat['id_categorie']; ?>"><?php echo utf8_encode($cat['nomcategorie']); ?></option>
-												<?php
-												foreach ($child as $subcat) {
-													if ($subcat['id_parent'] == $cat['id_categorie']) {
-														?><option value="<?php echo	$subcat['id'] ?>">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo utf8_encode($subcat['nomcategorie']); ?></option><?php }
-													}
-												}
-												?>
-											</select>
-											<span class="text-muted mt-3" style="cursor:pointer;"  onclick="toggleFamille()" >Creer une famille</span>
-											<div class="row famille" id="familleBlock" style="margin: 10px 0 0 2px;display: none;">
-												<input type="text" name="creerFamille" id="inputFamille" style="margin-right:10px" />
-												<button type="button" class="btn btn-default btn-sm" id="creerFamille" disabled="disabled">Créer une famille</button>
-											</div>
+                                        <select class="form-control" id="famille" size="0" name="famille">
+                                            <option value="0">Choisir la famille</option>
+                                            <?php
+                                            $sql = 'SELECT * FROM table_client_categorie WHERE LENGTH(nomcategorie) > 2 ORDER BY nomcategorie ASC';
+                                            $familles = $conn->query($sql);
+                                            $nbligne = $familles->num_rows;
+                                            $categorie = [];
+                                            $parent = [];
+                                            $child = [];
+                                            if ($nbligne > 0) {
+                                                while ($famille = $familles->fetch_assoc()) {
+                                                    $categorie[] = $famille;
+                                                    if ($famille['id_parent'] == 0) {
+                                                        $parent[] = $famille;
+                                                    } else {
+                                                        $child[] = $famille;
+                                                    }
+                                                }
+                                            }
+
+                                            foreach (range('A', 'Z') as $char) {
+                                                echo $char . "\n";
+                                                ?>
+                                                <option class="optionGroup alphabet" disabled >
+                                                    <?php echo "-".$char ?>
+                                                    <?php foreach ($categorie as $cat) {
+                                                        $nom_cat = $cat["nomcategorie"];
+                                                        $id_cat = $cat["id_categorie"];
+                                                        $id_parent= $cat['id_parent'];
+                                                        if(ucfirst($nom_cat[0]) == $char){
+                                                            if($id_parent == 0){
+                                                                ?>
+                                                                <option value="<?php echo $id_cat ?>" <?php echo $article['cath'] == $cat['id_categorie'] ? "selected" : "" ?>>
+                                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                                    <?php echo strtoupper($nom_cat) ?></option>
+                                                                <?php
+                                                                // echo "<option value=".$id_cat.">".strtoupper($nom_cat)."</option>";
+                                                                foreach($child as $subcat){
+                                                                    if($subcat['id_parent'] == $cat["id_categorie"]){
+                                                                        ?>
+                                                                        <option value="<?php echo $subcat["id"] ?>" 
+                                                                            <?php echo $article['cath'] == $subcat['id_categorie'] ? "selected" : "" ?>>
+                                                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                            <?php echo $subcat['nomcategorie'] ?>
+                                                                                
+                                                                            </option>
+
+                                                                        <?php
+                                                                        // echo "<option value=".$subcat["id"]." ".$article['cath'] == $subcat['id'] ? "selected" : ""."  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$subcat['nomcategorie']."</option>";
+                                                                    }
+                                                                }
+                                                            }else{
+                                                                $found = 0;
+                                                                foreach($parent as $catParent){
+                                                                    if($catParent['id_categorie'] == $id_parent){
+                                                                        $found += 1;
+                                                                        break;
+                                                                    }
+                                                                    
+                                                                }
+                                                                if($found == 0){
+                                                                    ?>
+                                                                    <option value="<?php echo $id_cat ?>" <?php echo $article['cath'] == $subcat['id'] ? "selected" : "" ?>>
+                                                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                                                        <?php echo $nom_cat ?>
+                                                                            
+                                                                        </option>
+
+                                                                    <?php
+                                                                        // echo "<option value=".$id_cat.">&nbsp;&nbsp;&nbsp;&nbsp;".$nom_cat."</option>";
+                                                                    }
+
+                                                            }
+                                                        }
+                                                        
+                                                    } ?>
+                                                </option>
+                                                <?php
+
+                                            }
 
 
-										</div>
+
+                                            ?>
+                                        </select>
+                                        <!-- <span class="text-muted mt-3" style="cursor:pointer;" onclick="toggleFamille()">Creer une famille</span>
+                                        <div class="row famille" id="familleBlock" style="margin: 10px 0 0 2px;display: none;">
+                                            <input type="text" name="creerFamille" id="inputFamille" style="margin-right:10px" />
+                                            <button type="button" class="btn btn-default btn-sm" id="creerFamille" disabled="disabled">Créer une famille</button>
+                                        </div> -->
+
+
+                                    </div>
 									</div>
 									<div class="form-group row">
 										<label class="col-lg-3 col-form-label form-control-label">Gencode</label>
@@ -207,16 +327,16 @@ $barcode = $_GET['gencode'];
 											<select class="form-control" size="0" name="code_tva" id="codetva">
 												<option value="null">Choisir</option>
 												<option value="0">0.0 % Exo</option>
-												<option value="1.05">1.5 %</option>
-												<option value="2.1">2.1 %</option>
-												<option value="8.5" selected>8.5 %</option>
+												<option value="1">1.5 %</option>
+												<option value="2">2.1 %</option>
+												<option value="8" selected>8.5 %</option>
 											</select>
 										</div>
 									</div>
 									<div class="form-group row">
 										<label class="col-lg-3 col-form-label form-control-label">Colisage</label>
 										<div class="col-lg-9">
-											<input class="form-control" type="text" name="colisage" id="colisage" value="">
+											<input class="form-control" type="text" name="package" id="package" value="">
 										</div>
 									</div>
 
@@ -298,8 +418,8 @@ $barcode = $_GET['gencode'];
 												<div class="col-lg-8">
 													<div class="form-check">
 														<input class="form-check-input position-static" style="border: 1px solid #ced4da;
-													border-radius: 0.25rem;
-													box-shadow: inset 0 0 0 transparent;margin: 0 0 10px 0;" type="radio" name="mode" id="mode2" aria-label="...">
+														border-radius: 0.25rem;
+														box-shadow: inset 0 0 0 transparent;margin: 0 0 10px 0;" type="radio" name="mode" id="mode2" aria-label="..." onclick="this.select()">
 														<label class="form-check-label" for="mode1" style="margin-left: 15px;font-weight: 600;font-size: 17px;">
 															Fixée en € HT:
 															<span style="font-weight:normal;font-size: 14px;">Le calcul € TTC se fait automatiquement avec le code TVA</span>
@@ -310,7 +430,7 @@ $barcode = $_GET['gencode'];
 												<div class="col-lg-4">
 													<input type="text" name="mode_prix_2_achat_ht" id="mode_prix_2_achat_ht" style="border: 1px solid #ced4da;
 													border-radius: 0.25rem;
-													box-shadow: inset 0 0 0 transparent;margin: 0 0 10px 0;" value="0.00"> <span style="font-weight: 600;">€ HT</span>
+													box-shadow: inset 0 0 0 transparent;margin: 0 0 10px 0;" value="0.00"  onclick="this.select()"> <span style="font-weight: 600;">€ HT</span>
 												</div>
 											</div>
 											<hr style="margin-top: 1rem;
@@ -321,8 +441,8 @@ $barcode = $_GET['gencode'];
 												<div class="col-lg-8">
 													<div class="form-check">
 														<input class="form-check-input position-static" style="border: 1px solid #ced4da;
-													border-radius: 0.25rem;
-													box-shadow: inset 0 0 0 transparent;margin: 0 0 10px 0;" type="radio" name="mode" id="mode3" aria-label="..." checked>
+														border-radius: 0.25rem;
+														box-shadow: inset 0 0 0 transparent;margin: 0 0 10px 0;" type="radio" name="mode" id="mode3" aria-label="..." checked  onclick="this.select()" >
 														<label class="form-check-label" for="mode1" style="margin-left: 15px;font-weight: 600;font-size: 17px;" >
 															Fixée en € TTC:
 														</label>
@@ -330,13 +450,13 @@ $barcode = $_GET['gencode'];
 
 												</div>
 												<div class="col-lg-4">
-													<input type="text" name="mode_prix_3_achat_ht" id="mode_prix_3_achat_ht" value="0.00" > <span style="font-weight: 600;" >€ TTC</span>
+													<input type="text" name="mode_prix_3_achat_ht" id="mode_prix_3_achat_ht" value="0.00"  onclick="this.select()" > <span style="font-weight: 600;" >€ TTC</span>
 												</div>
 											</div>
 										</div>
 									</div>
 
-									<div class="card card-primary"">
+									<div class="card card-primary">
 										<div class="card-header">
 											<h3 class="mb-0">FICHE PRIX PROMO (FALCULTATIF)</h3><br>
 											<p style="color:#ffffff">Remplissez ce formulaire si vous souhaitez programmer un prix promo.<br>Laisser le montant à 0€ pour ne pas programmer de promotion</p>
@@ -351,43 +471,52 @@ $barcode = $_GET['gencode'];
 													<div class="form-group row" style="justify-content: center;">
 														<div class="col-lg-4">
 															<input type="text" style="border: 1px solid #ced4da;
-													border-radius: 0.25rem;
-													box-shadow: inset 0 0 0 transparent;margin: 0 0 10px 0;" name="promottc" id="promottc" value="0.00"> <span style="font-weight: 600;font-size: 18px;color:red">€ TTC</span>
+															border-radius: 0.25rem;
+															box-shadow: inset 0 0 0 transparent;margin: 0 0 10px 0;" name="promottc" id="promottc" value="0.00"> <span style="font-weight: 600;font-size: 18px;color:red">€ TTC</span>
 														</div>
 													</div>
 													<div class="row text-left" >
 														<div class="col-lg-6" style="    text-align: right;">
 															<span style="font-weight:600">du</span> <input type="text" style="border: 1px solid #ced4da;
-													border-radius: 0.25rem;
-													box-shadow: inset 0 0 0 transparent;margin: 0 0 10px 0;" name="promo_debut" id="promo_debut" value="<?php echo date('d-m-Y', strtotime(' +1 day')) ?>" />  
+															border-radius: 0.25rem;
+															box-shadow: inset 0 0 0 transparent;margin: 0 0 10px 0;" name="promo_debut" id="promo_debut" value="<?php echo date('d-m-Y', strtotime(' +1 day')) ?>" />  
 														</div>
 														<div class="col-lg-6">
 															<span style="font-weight:600">au</span> <input type="text" style="border: 1px solid #ced4da;
-													border-radius: 0.25rem;
-													box-shadow: inset 0 0 0 transparent;margin: 0 0 10px 0;" name="promo_fin" id="promo_fin" value="<?php echo date('d-m-Y', strtotime(' +8 day')) ?>" /> <span style="font-weight:600">inclus</span>.
+															border-radius: 0.25rem;
+															box-shadow: inset 0 0 0 transparent;margin: 0 0 10px 0;" name="promo_fin" id="promo_fin" value="<?php echo date('d-m-Y', strtotime(' +8 day')) ?>" /> <span style="font-weight:600">inclus</span>.
 														</div>
 													</div>
 												</div>
 											</div>
 
-<!--											<div class="card card-outline-secondary">-->
-<!--												<div class="card-body" style="text-align: center;">-->
-<!--													<div class="row">-->
-<!--														<div class="col-lg-9">-->
-<!--															<ul style="list-style:none;">-->
-<!--																<li><span style="font-weight: 600;font-size: 20px;">Imprimer</span> <input type="number"  style="width:50px" name="exemplare" value="1"> <span style="font-weight: 600;font-size: 20px;"> examplaire(s) </span></li>-->
-<!--																<li><input type="checkbox"  name="print_prix_normal"  value="0.00"> Imprimer l'étiquette <span style="font-weight: 600;">prix normal</span></li>-->
-<!--																<li><input type="checkbox" name="print_prix_promo" checked> Imprimer l'étiquette <span style="font-weight: 600;">prix promo</span></li>-->
-<!--															</ul>-->
-<!---->
-<!--														</div>-->
-<!--													</div>-->
-<!--												</div>-->
-<!--											</div>-->
+											<div class="card card-primary">
+												<div class="card-header" style="text-align: center;">
+													<h3 class="mb-0">IMPRIMER ETIQUETTE</h3>
+												</div>
+												<div class="row">
+													<div class="col-md-3">
+														<div style="padding: 20px"><i class="fa fa-print fa-2x"></i></div>
+													</div>
+													<div class="col-md-9">
+														<span>Imprimer</span><input type="number" name="printNumber" value="1" id="printNumber" /><span>exemplaire(s)</span><br>
+														<input  type="checkbox"  name="print_prix_normal" checked value="0.00" id="prixNormal"> Imprimer l'étiquette <span style="font-weight: 600;">prix normal</span><br>
+														<input type="checkbox" name="print_prix_promo" id="prixPromo"> Imprimer l'étiquette <span style="font-weight: 600;">prix promo</span>
+
+
+														<?php 
+                                        // $zpl = formatLabel($article['titre'],$article['mode_prix_3_fixe_ttc'],$article['ref'],$arrayPos,$article['package'],$article['prixttc_promo_euro']);
+
+														?>
+														<button class="btn btn-dark btn-lg" type="button"  onclick="imprimeArticle()">Imprimer</button>
+
+													</div>
+												</div>
+											</div>
 
 											<div class="form-groupt row" style="padding: 30px 0;justify-content: space-around;">
 												<button type="button" onClick="window.location.href='articles.php';" class="btn btn-danger btn-lg">Annuler</button>
-												<button type="submit" class="btn btn-primary btn-lg" id="submitBtn" " name="save">Enregistrer</button>
+												<button type="submit" class="btn btn-primary btn-lg" id="submitBtn" name="save">Enregistrer</button>
 											</div>
 										</form>
 									</div><!-- /form user info -->
@@ -415,94 +544,96 @@ $barcode = $_GET['gencode'];
 			<?php include('../template/footer.php') ?>
 			<?php include('../template/script.php') ?>
 			<script src="../lib/dist/JsBarcode.ean-upc.min.js"></script>
-<!--			<style type="text/css">-->
-<!--				@media print {-->
-<!--					@page { size: auto;  margin: 0mm; }-->
-<!--					.etiquette {-->
-<!--						display: block;-->
-<!--						size: 30mm 21mm;-->
-<!--						margin: auto;-->
-<!--						padding: 0;-->
-<!--						text-align: center;-->
-<!---->
-<!--					}-->
-<!--					svg{-->
-<!--						position: absolute;-->
-<!--						top: 25%;-->
-<!--						left: 17%;-->
-<!--					}-->
-<!--					h5{-->
-<!--						margin-right: 50px;-->
-<!--						font-weight: 800;-->
-<!--					}-->
-<!--					.margin {-->
-<!--						margin: 50px 0;-->
-<!--					}-->
-<!---->
-<!--					.optionGroup {-->
-<!--						font-weight: bold;-->
-<!--						font-style: italic;-->
-<!--					}-->
-<!---->
-<!--					.optionChild {-->
-<!--						padding-left: 15px;-->
-<!--					}-->
-<!--					#familleBlock {-->
-<!--						display:none;-->
-<!--					}-->
-<!--				}-->
-<!--				</style>-->
-				<script type="text/javascript">
 
-					$("#submitBtn").click(function(event) {
-						event.preventDefault();
-						var famille = $('#famille').val();
-						var designation = $('#designation').val();
-						var gencode = $('#gencode').val();
-						var stock_actuel = $('#stock_actuel').val();
-						var stock_alerte = $('#stock_alerte').val();
-						var codetva = $('#codetva').val();
-						var colisage = $('#colisage').val() == "" ? null : $('#colisage').val();
-						var quantite = $('#quantite').val();
-						var unite = $('#unite').val();
-						var prix_variable = $('#prix_variable').val();
-						var mode_choice = $('input[type=radio][name=mode]:checked').attr('id');
-						var marge = $('#mode_prix_1_marge').val();
-						var mode_prix_3 = $('#mode_prix_3_achat_ht').val();
-						var mode_prix_2 = $('#mode_prix_2_achat_ht').val();
-						var mode_prix_1_achat = $('#mode_prix_1_achat_ht').val();
-						var promottc = $('#promottc').val();
-						var promo_debut = $('#promo_debut').val();
-						var promo_fin = $('#promo_fin').val();
-						var submitData = {
-							promo_debut:promo_debut,
-							promo_fin:promo_fin,
-							famille:famille,
-							designation:designation,
-							gencode:gencode,
-							stock_actuel:stock_actuel,
-							stock_alerte:stock_alerte,
-							codetva:codetva,
-							colisage:colisage,
-							quantite:quantite,
-							unite:unite,
-							prix_variable:prix_variable,
-							marge:marge,
-							mode:mode_choice,
-							mode_prix_3:mode_prix_3,
-							mode_prix_2:mode_prix_2,
-							mode_prix_1_achat:mode_prix_1_achat,
-							promottc:promottc,
-							
-						};
-						console.log(submitData)
-						$.ajax({
-							url: 'articleAjout.php',
-							type: "POST",
-							data: submitData,
-							success: function(result,statusText,jqXHR) {
+			<script type="text/javascript">
+
+
+				function imprimeArticle(){
+					var type = "";
+					var qte =  $('#printNumber').val();
+					if($('#prixNormal').is(':checked') ){
+						type="normal"
+					}else if ($('#prixPromo').is(':checked')){
+						type="promo";
+					}
+
+					$.ajax({
+						url: "request.php",
+						type: "POST",
+						contentType: "application/json",
+						data: JSON.stringify({
+							imprimeArticle: type,
+							titre:$('#designation').val(),
+							barcode:$('#gencode').val(),
+							prix:parseFloat($('#mode_prix_3_achat_ht').val()).toFixed(2),
+							package:$('#package').val() ,
+							promo: $('#promottc').val(),
+							promofin:$('#promo_fin').val(),
+						}),
+						success: function (data) {
+							console.log(data)
+							var result = JSON.parse(data)
+							if(result.response === 1){
+								writeToSelectedPrinter(result.message,qte)
+							}else{
+								alert('Une erreur est survenue. Veuillez réesayer')
+							}
+						}
+					})
+
+
+				}
+
+				$("#submitBtn").click(function(event) {
+					event.preventDefault();
+					var famille = $('#famille').val();
+					var designation = $('#designation').val();
+					var gencode = $('#gencode').val();
+					var stock_actuel = $('#stock_actuel').val();
+					var stock_alerte = $('#stock_alerte').val();
+					var codetva = $('#codetva').val();
+					var package = $('#package').val() == "" ? null : $('#package').val();
+					var quantite = $('#quantite').val();
+					var unite = $('#unite').val();
+					var prix_variable = $('#prix_variable').val();
+					var mode_choice = $('input[type=radio][name=mode]:checked').attr('id');
+					var marge = $('#mode_prix_1_marge').val();
+					var mode_prix_3 = $('#mode_prix_3_achat_ht').val();
+					var mode_prix_2 = $('#mode_prix_2_achat_ht').val();
+					var mode_prix_1_achat = $('#mode_prix_1_achat_ht').val();
+					var promottc = $('#promottc').val();
+					var promo_debut = $('#promo_debut').val();
+					var promo_fin = $('#promo_fin').val();
+					var submitData = {
+						promo_debut:promo_debut,
+						promo_fin:promo_fin,
+						famille:famille,
+						designation:designation,
+						gencode:gencode,
+						stock_actuel:stock_actuel,
+						stock_alerte:stock_alerte,
+						codetva:codetva,
+						package:package,
+						quantite:quantite,
+						unite:unite,
+						prix_variable:prix_variable,
+						marge:marge,
+						mode:mode_choice,
+						mode_prix_3:mode_prix_3,
+						mode_prix_2:mode_prix_2,
+						mode_prix_1_achat:mode_prix_1_achat,
+						promottc:promottc,
+
+					};
+
+					$.ajax({
+						url: 'articleAjout.php',
+						type: "POST",
+						data: submitData,
+						success: function(result,statusText,jqXHR) {
 								// console.log("RESULT=>",result)
 								var response = JSON.parse(result);
+								var type="";
 								// console.log(response);
 								if (response.response === 0 && response.element === 'famille') {
 									$('#famille').css('border-color','red');
@@ -534,8 +665,19 @@ $barcode = $_GET['gencode'];
 								}
 								else if(response.response === 1){
 								 // $('#'+type).addClass('swalDefaultSuccess');
-
-                                    imprimeEtiquettes(gencode,designation,response.prix)
+								 console.log($('input[name=print_prix_normal]:checked'))
+								 console.log($('input[name=print_prix_promo]:checked'))
+								 if($('#prixNormal').is(':checked')){
+								 	// imprimeEtiquettes(gencode,designation,response.prix,package) 
+								 	type="normal"
+								 	imprimeArticle()
+								 }
+								 else if($('#prixPromo').is(':checked')){
+								 	promottc = parseFloat(promottc)
+								 	// imprimeEtiquettes(gencode,designation,promottc,package) 	
+								 	type="promo"
+								 	imprimeArticle()
+								 }
 								 Toast.fire({
 								 	icon: 'success',
 								 	title: response.message
@@ -554,7 +696,7 @@ $barcode = $_GET['gencode'];
 
 							}
 						});
-					});
+				});
 
 			// JsBarcode("#barcode2", "9780199532179", {
 			// 	format:"EAN13",

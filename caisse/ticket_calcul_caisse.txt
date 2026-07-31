@@ -1,0 +1,24 @@
+
+CAISSE numero 2
+DATE : 22/08/2022 13:01:58
+------------------
+1 cent : 0
+2 cent : 0
+5 cent : 0
+10 cent : 50
+20 cent : 0
+50 cent : 0
+1 euro : 0
+2 euro : 0
+5 euros : 0
+10 euros : 0
+20 euros : 0
+50 euros : 0
+100 euros : 0
+200 euros : 0
+500 euros : 0
+
+
+------------------
+TOTAL : 5 EUR
+        

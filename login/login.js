@@ -17,7 +17,9 @@ $("#formLogin").submit(function(e) {
             if(result.response === 1 ){
 
                 if(result.role == "caisse"){
-                    window.location.reload()
+                    // window.location.reload()
+                    window.location.href = "step2.php"
+
                 }
                 else{
                     window.location.href = "../admin/";
@@ -45,7 +47,11 @@ function setIdCaisse(idcaisse) {
             var result = JSON.parse(data)
             if(result.response === 1){
                 var base_url = window.location.origin;
-                window.location.href = base_url + '/caisse-backend/caisse/'
+                if(result.type == 2 ){
+                    window.location.href = base_url + '/caisse-backend/bar/caisse/restaurant.php'
+                }else if(result.type == 1){
+                    window.location.href = base_url + '/caisse-backend/bar/caisse/'
+                }
             }
         }
     });

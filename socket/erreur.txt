@@ -1,0 +1,6 @@
+PHP Notice:  Undefined variable: ip_imprimante in C:\xampp\htdocs\caisse-backend\socket\App\PrintBarcode.php on line 31
+
+Notice: Undefined variable: ip_imprimante in C:\xampp\htdocs\caisse-backend\socket\App\PrintBarcode.php on line 31
+PHP Notice:  Undefined variable: port in C:\xampp\htdocs\caisse-backend\socket\App\PrintBarcode.php on line 33
+
+Notice: Undefined variable: port in C:\xampp\htdocs\caisse-backend\socket\App\PrintBarcode.php on line 33

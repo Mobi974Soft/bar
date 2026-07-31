@@ -1,0 +1,8 @@
+ip_imprimante_ticket = 
+port_ticket = 
+imprimante_nom = POS-80
+port = 
+ip_imprimante = 
+imprimante_codebarre = Argox
+ip_serveur = 192.168.1.20
+id_caisse = 1

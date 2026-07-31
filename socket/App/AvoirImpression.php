@@ -1,0 +1,111 @@
+<?php
+namespace App;
+use Ratchet\ConnectionInterface;
+use Ratchet\MessageComponentInterface;
+use Mike42\Escpos\Printer;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+use Mike42\Escpos\PrintConnectors\CupsPrintConnector;
+use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
+use Mike42\Escpos\EscposImage;
+
+
+
+
+class AvoirImpression implements MessageComponentInterface
+{
+    protected $clients;
+
+    public function __construct() {
+        $this->clients = new \SplObjectStorage;
+
+    }
+
+
+
+    public function onOpen(ConnectionInterface $conn) {
+        $this->clients->attach($conn);
+
+        echo "New connection! ({$conn->resourceId})\n";
+    }
+
+    public function onMessage(ConnectionInterface $connexion, $message) {
+    // Valider et filtrer les données reçues du navigateur si nécessaire
+    // Exécuter le script PHP pour lancer l'impression
+        
+    try {
+        // Créer une connexion vers l'imprimante
+       include('/var/www/localhost/caisse-backend/parametre.php');
+       if($ip_imprimante_ticket !== "" && $port_ticket !== ""){
+            $connector = new NetworkPrintConnector($ip_imprimante_ticket, $port_ticket);
+        }
+        else if(PHP_OS_FAMILY=="Windows") {
+            include('C:/xampp/htdocs/caisse-backend/parametre.php');
+            $connector = new WindowsPrintConnector($imprimante_nom);
+        }else{
+            
+            $connector = new CupsPrintConnector($imprimante_nom);
+        } 
+       
+    $json = json_decode($message,true);
+      $printer = new Printer($connector);
+        $printer->feed(1);
+        // if (is_file('logo.png') && file_exists('logo.png')) {
+            
+        // }
+        $printer->setTextSize(1, 1);
+        if (PHP_OS_FAMILY=="Windows") {
+            $logo = "C:/xampp/htdocs/caisse-backend/tickets/logo.png";
+        }else{
+            $logo = "/var/www/localhost/caisse-backend/tickets/logo.png";
+        } 
+        if (is_file($logo) && file_exists($logo)) {
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $img = EscposImage::load($logo);
+            $printer->bitImage($img);
+            $printer->feed(1);
+        } else {
+            // $printer->setJustification(Printer::JUSTIFY_CENTER);
+            // $printer->text($magasin);
+        }
+        $printer->setJustification(Printer::JUSTIFY_CENTER);
+        $printer->text(trim($json['ticket_entete']));
+        $printer->feed(1);
+        $printer->text($json['titre']);
+        $printer->setJustification(Printer::JUSTIFY_CENTER);
+        $printer->text($json['ticket']);
+        $printer->feed();
+
+        $printer->barcode($json['timestamps'], Printer::BARCODE_ITF);
+        $printer->text($json['timestamps']);
+        $printer->feed();
+        // if (is_file('../avoir/barcode/'.$timestamps.".png") && file_exists('../avoir/barcode/'.$timestamps.".png")) {
+        //  $barcodeImage = EscposImage::load('../avoir/barcode/'.$timestamps.".png");
+        //  $printer->bitImage($barcodeImage);
+        // }
+        $printer->setJustification(Printer::JUSTIFY_CENTER);
+        $printer->text($json['ticket_pied']);
+        $printer->feed(1);
+        $printer->cut();
+        $printer->close();
+        
+        // Envoyer une réponse au navigateur indiquant que l'impression a réussi
+        $connexion->send("Impression réussie !");
+    } catch (\Exception $e) {
+        // Gérer les erreurs d'impression
+        $connexion->send("Erreur d'impression : " . $e->getMessage());
+    }
+    }
+
+
+public function onClose(ConnectionInterface $conn) {
+    $this->clients->detach($conn);
+
+    echo "Connection {$conn->resourceId} has disconnected\n";
+}
+
+public function onError(ConnectionInterface $conn, \Exception $e) {
+    echo "An error has occurred: {$e->getMessage()}\n";
+
+    $conn->close();
+}
+}

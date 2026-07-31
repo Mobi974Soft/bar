@@ -13,7 +13,7 @@ $timestamp_ajout_catalogue = strtotime($modif_serveur_ajout_catalogue);
 
 $ch = curl_init();
 
-curl_setopt($ch, CURLOPT_URL, "https://caisse.mobisoft.fr/caisse-backend/test.php?catalogue_ajout=$timestamp_ajout_catalogue");
+curl_setopt($ch, CURLOPT_URL, "https://caisse.mobisoft.fr/restaurant/test.php?catalogue_ajout=$timestamp_ajout_catalogue");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 
@@ -76,7 +76,7 @@ $timestamp_modif_catalogue = strtotime($modif_serveur_modif_catalogue);
 
 $ch = curl_init();
 
-curl_setopt($ch, CURLOPT_URL, "https://caisse.mobisoft.fr/caisse-backend/test.php?catalogue_modif=$timestamp_modif_catalogue");
+curl_setopt($ch, CURLOPT_URL, "https://caisse.mobisoft.fr/restaurant/test.php?catalogue_modif=$timestamp_modif_catalogue");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 

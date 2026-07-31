@@ -1,24 +1,24 @@
 <?php
 include('../DBConfig.php');
-session_start();
-if (!isset($_SESSION['loggedin']) or $_SESSION['role'] == "caisse") { //if login in session is not set
+if (!isset($_SESSION['loggedinAdmin'])) { //if login in session is not set
 
-//    header("Location: ../login/");
+	header("Location: ../login/");
 }
 
 $checkHoraire = $conn->query("SELECT * FROM table_client_info");
 if($checkHoraire->num_rows == 1){
-    $infos = $checkHoraire->fetch_assoc();
-    $heure_debut = $infos['heure_debut'].":00";
-    $heure_fin = $infos['heure_fin'].":00";
-    $heure_actuel = date('H:i:s');
-    if($_SESSION['role'] != "superadmin"){
-        if( !($heure_actuel >= $heure_debut && $heure_actuel <= $heure_fin)){
-            echo "<script>alert('Magasin fermé ! ')</script>";
-            session_destroy();
-            header("Location: ../login/?info=close");
-        }
-    }
+	$infos = $checkHoraire->fetch_assoc();
+	$heure_debut = $infos['heure_debut'].":00";
+	$heure_fin = $infos['heure_fin'].":00";
+	$heure_actuel = date('H:i:s');
+	$nom_magasin = $infos['nom_magasin'];
+	if($_SESSION['role'] != "superadmin"){
+		if( !($heure_actuel >= $heure_debut && $heure_actuel <= $heure_fin)){
+			echo "<script>alert('Magasin fermé ! ')</script>";
+			session_destroy();
+			header("Location: ../login/?info=close");
+		}
+	}
 }
 
 ?>
@@ -28,13 +28,16 @@ if($checkHoraire->num_rows == 1){
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Administration</title>
-    <link rel="stylesheet" href="../lib/dist/plugins/daterangepicker/daterangepicker.css">
-    <link rel="stylesheet" href="../lib/dist/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+	<link rel="stylesheet" href="../lib/dist/plugins/daterangepicker/daterangepicker.css">
+	<link rel="stylesheet" href="../lib/dist/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 	<link rel="stylesheet" href="../lib/dist/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css" />
-    <link rel="stylesheet" href="../lib/dist/plugins/chart.js/Chart.min.css" />
+	<link rel="stylesheet" href="../lib/dist/plugins/chart.js/Chart.min.css" />
 	<link rel="stylesheet" href="../lib/dist/css/adminlte.min.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-	 <link rel="stylesheet" href="../template/style.css" />
+	<!-- <link rel="stylesheet" href="../template/style.css" /> -->
+	<link rel="stylesheet" href="../template/style.css?random=<?php echo uniqid(); ?>"/>
+	<link rel="stylesheet" href="sitemap.css?random=<?php echo uniqid(); ?>" />
+	
 </head>
 <body class="sidebar-mini" cz-shortcut-listen="true" style="height: auto;">
 	<div class="wrapper">
@@ -45,141 +48,50 @@ if($checkHoraire->num_rows == 1){
 				<li class="nav-item">
 					<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 				</li>
-				<li class="nav-item d-none d-sm-inline-block">
-					<a href="<?php 	echo $accueil; ?>" class="nav-link">Accueil</a>
-				</li>
+				<?php 
+				if ($title != 'Gestions des articles') {
+					?>
+					<li class="nav-item d-none d-sm-inline-block">
+						<a href="<?php 	echo $accueil; ?>" class="nav-link">Accueil</a>
+					</li>
+
+					<?php
+				}else{
+					?>	
+					<li class="nav-item d-none d-sm-inline-block">
+						<a href="<?php 	echo $accueil; ?>" class="nav-link">Accueil</a>
+					</li>
+					<li class="nav-item d-none d-sm-inline-block">
+						<a href="articles.php" class="nav-link">Gestion des Articles</a>
+					</li>
+					<li class="nav-item d-none d-sm-inline-block">
+						<a href="statistiques.php" class="nav-link">Statistiques</a>
+					</li>
+					<li class="nav-item d-none d-sm-inline-block">
+						<a href="raccourci.php" class="nav-link">Raccourcis</a>
+					</li>
+					<li class="nav-item d-none d-sm-inline-block">
+						<a href="../login/logout.php?userid=<?php echo $_SESSION['id'] ?>&action=admin" class="btn btn-block btn-danger">Déconnexion</a>
+					</li>
+					<?php
+				}
+				?>
+				
 				<!-- <li class="nav-item d-none d-sm-inline-block">
 					<a href="#" class="nav-link">Contact</a>
 				</li> -->
 			</ul>
 
-			<!-- <ul class="navbar-nav ml-auto">
-
-				<li class="nav-item">
-					<a class="nav-link" data-widget="navbar-search" href="#" role="button">
-						<i class="fas fa-search"></i>
-					</a>
-					<div class="navbar-search-block">
-						<form class="form-inline">
-							<div class="input-group input-group-sm">
-								<input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-								<div class="input-group-append">
-									<button class="btn btn-navbar" type="submit">
-										<i class="fas fa-search"></i>
-									</button>
-									<button class="btn btn-navbar" type="button" data-widget="navbar-search">
-										<i class="fas fa-times"></i>
-									</button>
-								</div>
-							</div>
-						</form>
-					</div>
-				</li>
-
-				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#">
-						<i class="far fa-comments"></i>
-						<span class="badge badge-danger navbar-badge">3</span>
-					</a>
-					<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-						<a href="#" class="dropdown-item">
-
-							<div class="media">
-								<img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-								<div class="media-body">
-									<h3 class="dropdown-item-title">
-										Brad Diesel
-										<span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-									</h3>
-									<p class="text-sm">Call me whenever you can...</p>
-									<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-								</div>
-							</div>
-
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item">
-
-							<div class="media">
-								<img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-								<div class="media-body">
-									<h3 class="dropdown-item-title">
-										John Pierce
-										<span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-									</h3>
-									<p class="text-sm">I got your message bro</p>
-									<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-								</div>
-							</div>
-
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item">
-
-							<div class="media">
-								<img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-								<div class="media-body">
-									<h3 class="dropdown-item-title">
-										Nora Silvester
-										<span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-									</h3>
-									<p class="text-sm">The subject goes here</p>
-									<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-								</div>
-							</div>
-
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-					</div>
-				</li>
-
-				<li class="nav-item dropdown">
-					<a class="nav-link" data-toggle="dropdown" href="#">
-						<i class="far fa-bell"></i>
-						<span class="badge badge-warning navbar-badge">15</span>
-					</a>
-					<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-						<span class="dropdown-header">15 Notifications</span>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item">
-							<i class="fas fa-envelope mr-2"></i> 4 new messages
-							<span class="float-right text-muted text-sm">3 mins</span>
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item">
-							<i class="fas fa-users mr-2"></i> 8 friend requests
-							<span class="float-right text-muted text-sm">12 hours</span>
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item">
-							<i class="fas fa-file mr-2"></i> 3 new reports
-							<span class="float-right text-muted text-sm">2 days</span>
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-					</div>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" data-widget="fullscreen" href="#" role="button">
-						<i class="fas fa-expand-arrows-alt"></i>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-						<i class="fas fa-th-large"></i>
-					</a>
-				</li>
-			</ul> -->
+			
 		</nav>
 
 
-		<aside class="main-sidebar sidebar-dark-primary elevation-4">
+		<aside class="main-sidebar sidebar-dark-primary elevation-4 ">
 
 			<a href="index3.html" class="brand-link">
 				<!-- <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
-<!--				--><?php //include('../parametre.php') ?>
-                <span class="brand-text font-weight-light">Mobisoft</span>
+				<!--				--><?php //include('../parametre.php') ?>
+				<span class="brand-text font-weight-light text-center"><?php echo isset($nom_magasin) ? ucfirst($nom_magasin) : "Mobisoft" ?></span>
 			</a>
 
 			<div class="sidebar">
@@ -195,78 +107,135 @@ if($checkHoraire->num_rows == 1){
 
 				
 
-				<nav class="mt-2">
-					 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+				<nav class="mt-2navbar-expand-lg " >
+					<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
-<!--						<li class="nav-item menu-open">-->
-<!--							<a href="#" class="nav-link active">-->
-<!--								<i class="nav-icon fas fa-tachometer-alt"></i>-->
-<!--								<p>-->
-<!--									Gestion des articles-->
-<!--									<i class="right fas fa-angle-left"></i>-->
-<!--								</p>-->
-<!--							</a>-->
-<!--							<ul class="nav nav-treeview">-->
-<!--								<li class="nav-item">-->
-<!--									<a href="#" class="nav-link active">-->
-<!--										<i class="far fa-circle nav-icon"></i>-->
-<!--										<p>Active Page</p>-->
-<!--									</a>-->
-<!--								</li>-->
-<!--								<li class="nav-item">-->
-<!--									<a href="#" class="nav-link">-->
-<!--										<i class="far fa-circle nav-icon"></i>-->
-<!--										<p>Inactive Page</p>-->
-<!--									</a>-->
-<!--								</li>-->
-<!--							</ul>-->
-<!--						</li>-->
-						<li class="nav-item">
-							<a href="../admin/articles.php" class="nav-link">
-								<i class="nav-icon fas fa-barcode"></i>
-								<p>
-									Gestion des articles
-<!--									<span class="right badge badge-danger">New</span>-->
-								</p>
-							</a>
-						</li>
-                         <li class="nav-item">
-                             <a href="../admin/statistiques.php" class="nav-link">
-                                 <i class="nav-icon fas fa-inbox"></i>
-                                 <p>
-                                     Statistiques
-<!--                                     <span class="right badge badge-danger">New</span>-->
-                                 </p>
-                             </a>
-                         </li>
-                         <li class="nav-item">
-                             <a href="../admin/manageCaisse.php" class="nav-link">
-                                 <i class="nav-icon fas fa-cash-register"></i>
-                                 <p>
-                                     Gestion des caisses
-                                     <!--                                     <span class="right badge badge-danger">New</span>-->
-                                 </p>
-                             </a>
-                         </li>
+						<?php 
 
-                         <?php if($_SESSION['role'] == "superadmin"): ?>
-                         <li class="nav-item">
-                             <a href="../admin/profil.php" class="nav-link">
-                                 <i class="nav-icon fas fa-user"></i>
-                                 <p>
-                                     Profil
-                                 </p>
-                             </a>
-                         </li>
-                        <?php endif; ?>
-                         <li class="nav-item">
-                             <a href="../admin/manageCaisse.php" class="nav-link">
-                                 <a href="../login/logout.php?userid=<?php echo $_SESSION['id'] ?>&action=admin" class="btn btn-block btn-danger btn-lg">Déconnexion</a>
-                             </a>
-                         </li>
-					</ul>
-				</nav>
+						if ($title != "Gestions des articles") {
+							?>
 
-			</div>
+							<li class="nav-item">
+								<a href="../admin/articles.php" class="nav-link">
+									<i class="nav-icon fas fa-barcode"></i>
+									<p>
+										Gestion des articles
+										<!--									<span class="right badge badge-danger">New</span>-->
+									</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="../admin/statistiques.php" class="nav-link">
+									<i class="nav-icon fas fa-inbox"></i>
+									<p>
+										Statistiques
+										<!--                                     <span class="right badge badge-danger">New</span>-->
+									</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="../admin/raccourci.php" class="nav-link">
+									<i class="nav-icon fas fa-inbox"></i>
+									<p>
+										Raccourcis
+									</p>
+								</a>
+							</li>
 
-		</aside>
+							<?php if($_SESSION['role'] == "superadmin"): ?>
+								<li class="nav-item">
+									<a href="../admin/profil.php" class="nav-link">
+										<i class="nav-icon fas fa-gear"></i>
+										<p>
+											Options
+										</p>
+									</a>
+								</li>
+							<?php endif; ?>
+							<li class="nav-item">
+								<a href="../admin/manageCaisse.php" class="nav-link">
+									<a href="../login/logout.php?userid=<?php echo $_SESSION['id'] ?>&action=admin" class="btn btn-block btn-danger btn-lg">Déconnexion</a>
+								</a>
+							</li>
+
+							<?php
+						}else
+
+						{
+							?>	
+
+							<p style="color:#FFFFFF"><i class="fa-solid fa-folder"></i> Catégories</p>
+							<?php
+							$sql = 'SELECT * FROM table_client_categorie WHERE LENGTH(nomcategorie) > 2 ORDER BY nomcategorie ASC';
+							$familles = $conn->query($sql);
+							$nbligne = $familles->num_rows;
+							$categorie = [];
+							$parent = [];
+							$child = [];
+							if ($nbligne > 0) {
+								while ($famille = $familles->fetch_assoc()) {
+									$categorie[] = $famille;
+									if ($famille['id_parent'] == 0) {
+										$parent[] = $famille;
+									} else {
+										$child[] = $famille;
+									}
+								}
+							}
+
+							echo "<ul class='sitemap'>";
+							foreach (range('A', 'Z') as $char) {
+								?>
+								<ul>
+									<li>  <a href="" style="color:#FFFFFF;"  onclick="toggleCat('<?php echo $char ?>',event)"><i class="fa-solid fa-folder"  id="icon-<?php echo $char ?>"></i> <?php echo $char ?></a>
+										<ul id="bloc-<?php echo $char ?>" style="display: <?php echo isset($_GET['nomCat']) && strtoupper($_GET['nomCat'][0]) == $char[0] ? "block" : "none"   ?>; " >
+											<?php foreach ($categorie as $cat) {
+												$nom_cat = $cat["nomcategorie"];
+												$id_cat = $cat["id_categorie"];
+												$id_parent= $cat['id_parent'];
+												if(ucfirst($nom_cat[0]) == $char){
+													if($id_parent == 0){
+														?>
+														<li><a href="categorie.php?page=1&id=<?php echo $id_cat ?>&nomCat=<?php echo $nom_cat ?>" class="catFirst"><?php echo ucfirst($nom_cat) ?></a>
+															<?php
+															echo "<ul>";
+															foreach($child as $subcat){
+																if($subcat['id_parent'] == $cat["id_categorie"]){
+																	?>
+																	<li>
+																		<a href="categorie.php?page=1&id=<?php echo $id_cat ?>&nomCat=<?php echo $subcat['nomcategorie'] ?>" class="catFirst"><?php echo $subcat['nomcategorie'] ?></a>
+																	</li>
+																	<?php
+																}
+															}
+															echo "</ul>";
+															echo "</li>";
+
+														}
+													}
+
+												} ?>
+											</ul>
+										</li>
+									</ul>
+
+									<?php
+								}
+								echo "</ul>";
+
+
+
+								?>
+
+
+								<?php
+							}
+
+							?>
+
+						</ul>
+					</nav>
+
+				</div>
+
+			</aside>
