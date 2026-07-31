@@ -4,6 +4,7 @@ ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 include('../DBConfig.php');
 include('../functions.php');
+require_once __DIR__ . '/promo/PromoCode.php';
 if (!isset($_SESSION['loggedin'],$_SESSION['id_caisse'])) { //if login in session is not set
 	header("Location: ../login/");
 }else{
