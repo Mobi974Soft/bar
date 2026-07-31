@@ -2812,17 +2812,12 @@ function pay(id_caisse,multiple=false,element=null){
 					var paiementEncaisse =  $('#paiementTotal').text().split(" ")
 					paiementEncaisse = parseFloat(paiementEncaisse[0])
 					console.log("avoir=>",paiementEncaisse , totalDu,"arendre=>",rendu)
-					if (paiementEncaisse >= totalDu) {
+					if (res.clear === true || paiementEncaisse >= totalDu) {
 						if(paiementTotal > totalDu){
 							var argentArendre = paiementTotal - totalDu ;
 							console.log("ARGENT A RENDRE=>"+argentArendre)
 							$('#monnaieArendre').text(argentArendre.toFixed(2) + " €")
 						}
-						clearPanier(id_caisse,rendu,res.table)
-						$('#paiementBoard').css('display','none')
-						
-					}else 
-					if(paiementEncaisse == totalDu){
 						clearPanier(id_caisse,rendu,res.table)
 						$('#paiementBoard').css('display','none')
 					}
