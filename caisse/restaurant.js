@@ -44,19 +44,20 @@ function togglePromoCode(idCaisse, idTable, active) {
 
 function resetPromoCodeButton(idCaisse, idTable) {
 	var button = $('#btnCodePromo');
-	if (!button.length) {
-		return;
+	if (button.length) {
+		button
+			.removeClass('btn-danger promo-active')
+			.addClass('btn-promo')
+			.prop('disabled', false)
+			.attr('title', '')
+			.attr('data-id-table', idTable)
+			.attr('onclick', "togglePromoCode('" + idCaisse + "','" + idTable + "',false)")
+			.html('<i class="fa-solid fa-tag"></i> Code promo');
 	}
 
-	button
-		.removeClass('btn-danger promo-active')
-		.addClass('btn-promo')
-		.prop('disabled', false)
-		.attr('title', '')
-		.attr('data-id-table', idTable)
-		.attr('onclick', "togglePromoCode('" + idCaisse + "','" + idTable + "',false)")
-		.html('<i class="fa-solid fa-tag"></i> Code promo');
-	$('.promo-summary').remove();
+	// L'encaissement ne recharge pas la page : on retire aussi tous les
+	// indicateurs de promo encore présents dans le panier courant.
+	$('.promo-summary, .promo-line').remove();
 }
 
 $('#showRemisePourcent').click(function(e){
@@ -2830,8 +2831,8 @@ function pay(id_caisse,multiple=false,element=null){
 					paiementEncaisse = parseFloat(paiementEncaisse[0])
 					console.log("avoir=>",paiementEncaisse , totalDu,"arendre=>",rendu)
 					if (res.clear === true || paiementEncaisse >= totalDu) {
-						if(paiementTotal > totalDu){
-							var argentArendre = paiementTotal - totalDu ;
+						if(paiementEncaisse > totalDu){
+							var argentArendre = paiementEncaisse - totalDu ;
 							console.log("ARGENT A RENDRE=>"+argentArendre)
 							$('#monnaieArendre').text(argentArendre.toFixed(2) + " €")
 						}
@@ -2876,6 +2877,8 @@ function pay(id_caisse,multiple=false,element=null){
 
 function clearPanier( id_caisse, rendu = false,idtable) {
 	console.log("IDCAISSE=>"+id_caisse)
+	// Ne pas dépendre du rechargement partiel pour réinitialiser la promo.
+	resetPromoCodeButton(id_caisse, idtable)
 	$.ajax({
 		url: "../panier/videPanier.php",
 		type: "POST",
@@ -2889,8 +2892,14 @@ function clearPanier( id_caisse, rendu = false,idtable) {
 					title: "Achat validé ! Ticket en cours d'impression..."
 				})
 				$('#totalPanier').text("0.00 €")
+				$('#totalQte').text('0')
+				$('#caddie, #sousPanier').empty()
 				$('#modal-confirmation').modal('hide')
-				$("#panierContent").load(location.href + " #panierContent");
+				$("#panierContent").load(location.href + " #panierContent", function () {
+					// Le fragment PHP peut encore contenir l'ancien état si la réponse
+					// a été mise en cache : le succès d'encaissement reste la référence.
+					resetPromoCodeButton(id_caisse, idtable)
+				});
 				// window.location.href = "restaurant.php"
 				
 			} 
