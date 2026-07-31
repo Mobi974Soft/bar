@@ -7,6 +7,7 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Autho
 
 include '../functions.php';
 include '../DBConfig.php';
+require_once __DIR__ . '/../caisse/promo/PromoCode.php';
 $postdata = file_get_contents('php://input');
 if (isset($postdata)) {
     $request = json_decode($postdata);
@@ -16,6 +17,7 @@ if (isset($postdata)) {
         if ($clear == true) {
             $sql = "DELETE FROM table_client_panier WHERE  id_caisse = $id_caisse";
             if ($conn->query($sql) === TRUE) {
+				PromoCode::clearCaisseStates($id_caisse);
                 // $updateTable = $conn->query("UPDATE restaurant_tables SET status = 0 WHERE status = 1 ");
                 // $deletePaiement = $conn->query("DELETE FROM paiement_quantite  WHERE `table` = $table");
                 echo 1;
@@ -38,7 +40,6 @@ if (isset($postdata)) {
     // }
 
 }
-
 
 
 
