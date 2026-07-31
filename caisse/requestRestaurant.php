@@ -324,7 +324,7 @@ if(isset($postdata)){
 
         }
         else{
-            $sql = "SELECT * FROM table_client_panier WHERE idtable = $numerotable";
+            $sql = "SELECT * FROM table_client_panier WHERE idtable = $numerotable AND id_caisse = $id_caisse";
         }
         
         $panier = $conn->query($sql);
