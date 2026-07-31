@@ -197,6 +197,7 @@ if(isset($postdata)){
         $resteApayer = $request->resteAPayer;
         $paiementDetails = $request->paiementDetails;
         $produitChoix = isset($request->produitChoix) ? $request->produitChoix : "";
+		$fullCartPayment = !empty($request->full_cart);
         // JSON.stringify omet les propriétés JavaScript à undefined. Un paiement
         // standard arrive donc parfois sans infoTicket : on le normalise ici afin
         // que son panier passe bien dans le calcul des statistiques promo.
@@ -442,7 +443,7 @@ if(isset($postdata)){
 		// Le serveur peut donc confirmer la fin du panier sans dépendre des valeurs
 		// recalculées dans le navigateur. Les paiements par produits / fractionnés
 		// conservent volontairement l'état promo pour les tickets suivants.
-		if ($infoTicket === '') {
+		if ($fullCartPayment || $infoTicket === '') {
 			$shouldClearCart = $total_euro + 0.005 >= (float) $resteApayer;
 		}
 		// Si les identifiants de lignes du panier ont changé entre l'application
