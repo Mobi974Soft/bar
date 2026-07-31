@@ -3,6 +3,63 @@ const modal_body_cheque = $('#modal-body-cheque').html();
 const modal_body_cb = $('#modal-body-cb').html();
 const modal_body_espece = $('#modal-body-espece').html();
 
+function togglePromoCode(idCaisse, idTable, active) {
+	var action = active ? 'undo' : 'apply';
+	var title = active ? 'Retirer le code promo ?' : 'Appliquer le code promo ?';
+	var text = active
+		? 'Les prix initiaux seront restaurés sur ce panier.'
+		: 'Une remise de 1 € sera appliquée à chaque article du panier. Un seul code promo est autorisé par panier.';
+
+	Swal.fire({
+		title: title,
+		text: text,
+		icon: 'question',
+		showCancelButton: true,
+		confirmButtonText: active ? 'Oui, retirer' : 'Oui, appliquer',
+		cancelButtonText: 'Annuler',
+		confirmButtonColor: active ? '#dc3545' : '#6c5ce7'
+	}).then(function (result) {
+		if (!result.isConfirmed) {
+			return;
+		}
+
+		$('#btnCodePromo').prop('disabled', true);
+		$.ajax({
+			url: 'promo-code.php',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify({ action: action, id_caisse: idCaisse, id_table: idTable }),
+			success: function (response) {
+				Toast.fire({ icon: 'success', title: response.message });
+				window.location.reload();
+			},
+			error: function (xhr) {
+				var response = xhr.responseJSON || {};
+				Toast.fire({ icon: 'error', title: response.message || 'Impossible de modifier le code promo.' });
+				$('#btnCodePromo').prop('disabled', false);
+			}
+		});
+	});
+}
+
+function resetPromoCodeButton(idCaisse, idTable) {
+	var button = $('#btnCodePromo');
+	if (button.length) {
+		button
+			.removeClass('btn-danger promo-active')
+			.addClass('btn-promo')
+			.prop('disabled', false)
+			.attr('title', '')
+			.attr('data-id-table', idTable)
+			.attr('onclick', "togglePromoCode('" + idCaisse + "','" + idTable + "',false)")
+			.html('<i class="fa-solid fa-tag"></i> Code promo');
+	}
+
+	// L'encaissement ne recharge pas la page : on retire aussi tous les
+	// indicateurs de promo encore présents dans le panier courant.
+	$('.promo-summary, .promo-line').remove();
+}
+
 $('#showRemisePourcent').click(function(e){
     $('#remise-globale').show()
     $('#remise-globale-euro').hide()
@@ -536,13 +593,15 @@ function totalCaisse(id_caisse, options = null) {
                 }),
                 success: function (data) {
                     console.log(data)
-                    var result = JSON.parse(data)
-                    if (result.response === 1) {
-                        Toast.fire({
-                            icon: 'success',
-                            title: "Ticket du total caisse imprimé !"
-                        })
-                    }
+					var result = typeof data === 'string' ? JSON.parse(data) : data
+					if (result.response === 1) {
+						Toast.fire({
+							icon: 'success',
+							title: "Ticket du total caisse imprimé !"
+						})
+					} else {
+						Toast.fire({ icon: 'error', title: result.message || 'Impression impossible' })
+					}
                 }
             })
         // }
@@ -2541,6 +2600,10 @@ function newProduitPrice(ref,id_caisse){
 function pay(id_caisse,multiple=false,element=null){
 	
 	var nbProduitCocher = $('input[name="produitChoix[]"]:checked').length;
+	// Mémoriser le type d'encaissement avant que le code historique ne coche
+	// automatiquement toutes les lignes. Sinon un paiement du panier complet est
+	// envoyé au serveur comme un paiement partiel "choixProduit".
+	var fullCartPayment = nbProduitCocher === 0 && !multiple;
 	var paiementShared = false;
 
 	if($('.inputMontantPaiement').val()==0 && nbProduitCocher == 0){
@@ -2677,7 +2740,9 @@ function pay(id_caisse,multiple=false,element=null){
 			data: JSON.stringify({
 				paiementDetails: newArray,
 				id_caisse:id_caisse,
+				id_table:parseInt($('#btnCodePromo').attr('data-id-table'), 10) || 0,
 				multiple:multiple,
+				full_cart:fullCartPayment,
 				resteAPayer:resteAPayer,
 				produitChoix:arrProduit,
 				infoTicket:infoTicket,
@@ -2686,6 +2751,9 @@ function pay(id_caisse,multiple=false,element=null){
 				// console.log(response)
 				
 				var res = JSON.parse(response)
+				if (res.warning) {
+					Toast.fire({ icon: 'warning', title: res.warning })
+				}
 				if (res.response == 1) {
 					// $('#totalPanier').text("0.00 €")
 					console.log("table=>"+res.arendre)
@@ -2767,17 +2835,15 @@ function pay(id_caisse,multiple=false,element=null){
 					var paiementEncaisse =  $('#paiementTotal').text().split(" ")
 					paiementEncaisse = parseFloat(paiementEncaisse[0])
 					console.log("avoir=>",paiementEncaisse , totalDu,"arendre=>",rendu)
-					if (paiementEncaisse >= totalDu) {
-						if(paiementTotal > totalDu){
-							var argentArendre = paiementTotal - totalDu ;
+					if (res.clear === true || paiementEncaisse >= totalDu) {
+						if(paiementEncaisse > totalDu){
+							var argentArendre = paiementEncaisse - totalDu ;
 							console.log("ARGENT A RENDRE=>"+argentArendre)
 							$('#monnaieArendre').text(argentArendre.toFixed(2) + " €")
 						}
-						clearPanier(id_caisse,rendu,res.table)
-						$('#paiementBoard').css('display','none')
-						
-					}else 
-					if(paiementEncaisse == totalDu){
+						// La page restaurant reste ouverte après l'encaissement : on remet
+						// donc le bouton à son état initial sans attendre un rechargement.
+						resetPromoCodeButton(id_caisse, res.table)
 						clearPanier(id_caisse,rendu,res.table)
 						$('#paiementBoard').css('display','none')
 					}
@@ -2816,6 +2882,8 @@ function pay(id_caisse,multiple=false,element=null){
 
 function clearPanier( id_caisse, rendu = false,idtable) {
 	console.log("IDCAISSE=>"+id_caisse)
+	// Ne pas dépendre du rechargement partiel pour réinitialiser la promo.
+	resetPromoCodeButton(id_caisse, idtable)
 	$.ajax({
 		url: "../panier/videPanier.php",
 		type: "POST",
@@ -2829,8 +2897,14 @@ function clearPanier( id_caisse, rendu = false,idtable) {
 					title: "Achat validé ! Ticket en cours d'impression..."
 				})
 				$('#totalPanier').text("0.00 €")
+				$('#totalQte').text('0')
+				$('#caddie, #sousPanier').empty()
 				$('#modal-confirmation').modal('hide')
-				$("#panierContent").load(location.href + " #panierContent");
+				$("#panierContent").load(location.href + " #panierContent", function () {
+					// Le fragment PHP peut encore contenir l'ancien état si la réponse
+					// a été mise en cache : le succès d'encaissement reste la référence.
+					resetPromoCodeButton(id_caisse, idtable)
+				});
 				// window.location.href = "restaurant.php"
 				
 			} 
@@ -3381,14 +3455,14 @@ function addProduitDiversSimple( idcaisse,qte) {
 
 
 					
-					}else if(result.response === 2){
-						
-						var newQte = result.data;
-						$("#totalPanier").load(location.href + " #totalPanier");
-						$('#quantiteProduit-'+result.message).val(newQte);
-						$('#qteLigne-'+ref).text(prix.toFixed(2)+"€ x"+newQte)
+						}else if(result.response === 2){
+							var newQte = result.data;
+							$("#totalPanier").load(location.href + " #totalPanier");
+							$('#quantiteProduit-'+result.message).val(newQte);
+							$('#qteLigne-'+ref).text(prix.toFixed(2)+"€ x"+newQte)
+						}
+						$("#panierContent").load(location.href + " #panierContent>*");
 					}
-				}
 			})
 		}
 		function offrirArticle(titre,id_caisse,num){

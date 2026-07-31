@@ -3,8 +3,9 @@
 	<div class="row panierTitle">
 		<div class="col-1 text-center" style="margin: auto;"><i class="fa-solid fa-cart-shopping "></i> <span
 			id="panierlogo" style="font-weight: 600;margin-left: 5px"></span></div>
-			<div class="col-lg-4">
+			<div class="col-lg-3">
 				<?php
+				$numerotable = 0;
 				$sql = "SELECT numero FROM restaurant_tables WHERE status = 1";
 				$table = $conn->query($sql);
 				if ($table->num_rows > 0) {
@@ -37,7 +38,7 @@
 
 		?>
 	</div>
-	<div class="col-lg-2">
+	<div class="col-lg-1">
 		<?php if ($restaurant == 1): ?>
 				<!-- <button type="button" style="width: 100%;" class="btn btn-dark btn-block" id="btnNumeroTable"
 					onclick="window.location.href = '?tables' "><i class="fa fa-bell"></i> -->
@@ -55,8 +56,24 @@
 				<?php endif ?>
 
 			</div>
-			<div class="col-3">
+			<div class="col-2">
 				<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-fidelite">Fidélité</button>
+			</div>
+			<?php
+			$promoStatus = PromoCode::getStatus($id_caisse, $numerotable);
+			$promoButtonDisabled = !$promoStatus['available'] && !$promoStatus['active'];
+			?>
+			<div class="col-3 promo-code-action">
+				<button type="button"
+					id="btnCodePromo"
+					data-id-table="<?php echo (int) $numerotable; ?>"
+					class="btn btn-block <?php echo $promoStatus['active'] ? 'btn-danger promo-active' : 'btn-promo'; ?>"
+					<?php echo $promoButtonDisabled ? 'disabled' : ''; ?>
+					title="<?php echo htmlspecialchars($promoStatus['message'], ENT_QUOTES, 'UTF-8'); ?>"
+					onclick="togglePromoCode('<?php echo $id_caisse ?>','<?php echo $numerotable ?>',<?php echo $promoStatus['active'] ? 'true' : 'false'; ?>)">
+					<i class="fa-solid <?php echo $promoStatus['active'] ? 'fa-rotate-left' : 'fa-tag'; ?>"></i>
+					<?php echo $promoStatus['active'] ? 'Annuler promo' : 'Code promo'; ?>
+				</button>
 			</div>
 			<div class="col-lg-2">
 				<button type="button" class="btn btn-default"
@@ -255,6 +272,7 @@
 			$num = $row['num'];
 			$idtable = $row['idtable'];
 			$remise = $row['remise'];
+			$remiseEuro = (float) $row['remise_euro'];
 			$id_produit = $row['id_produit'];
 			$remise_unique = json_decode($row['remise_unique']);
 			$remise_unique = $remise_unique != NULL ? $remise_unique[0] : 0;
@@ -266,11 +284,12 @@
 			$prix = $prixPromo > 0 ? $prixPromo : $pu_euro;
 
 
-			$prixLigne = $prix - ($prix * ($remise_unique / 100));
-			$prixLigne = $prixLigne * $qte;
-			$promoLigne = $promo == 1 ? "Remise de -" + formatNumber($prix) : "";
+			$prixUnitaireNet = max(0, $prix - ($prix * ($remise_unique / 100)) - $remiseEuro);
+			$prixLigne = $prixUnitaireNet * $qte;
+			$promoLigne = $promo == 1 ? "Prix promotionnel" : "";
 			$remiseLigne = ($remise_unique >0 ? "Remise de " . $remise_unique . "%" : ($remise_unique == 100 ? "Article Offert" : ""));
-			$qteLigne = $remise_unique >0 ? formatNumber($prixLigne) . "€ x" . $qte : formatNumber($prix) . "€ x" . $qte;
+			$qteLigne = formatNumber($prixUnitaireNet) . "€ x" . $qte;
+			$promoItem = PromoCode::itemFromState($promoStatus['state'], $num);
 
 			?>
 			<div class="accordion" id="accordion-<?php echo $num ?>">
@@ -314,6 +333,9 @@
 							}
 							if ($remiseLigne != "" ) {
 								echo '<p class="text-muted" style="font-size:13px;margin-bottom: 0;font-style:italic">' . $remiseLigne . '</p>';
+							}
+							if ($promoItem) {
+								echo '<p class="promo-line"><i class="fa-solid fa-tag"></i> Code promo : -' . formatNumber($promoItem['unit_discount']) . ' € / article</p>';
 							}
 							?>
 							<p class="text-muted" style="font-size:17px;margin-bottom: 0;"
@@ -398,18 +420,13 @@
 				$promo = $row['promo'];
 				$pu_euro = $row['pu_euro'];
 				$qte = $row['qte'];
-				$prix = $pu_euro;
+				$prix = $promo > 0 ? $promo : $pu_euro;
 				$tauxtva = $row['taux_tva'];
 				$remiseProduit = $row['remise'];
 				$remise_unique = json_decode($row['remise_unique']);
 				$remise_unique = $remise_unique != NULL ? $remise_unique[0] : 0;
-				if ($promo > 0) {
-					$prix = $pu_euro;
-				}
-					// var_dump($prix . "-(" . $prix .'*('.$remise.'/100))');
-				$prix = $prix - ($prix * ($remise_unique / 100));
-				$prix = $prix * $qte;
-				$totalPanier += $prix;
+				$prix = max(0, $prix - ($prix * ($remise_unique / 100)) - (float) $row['remise_euro']);
+				$totalPanier += $prix * $qte;
 				$cumul_tva += ($prix - ($prix / (1 + $tauxtva / 100))) * $qte;
 
 
@@ -419,6 +436,16 @@
 		$totalHT = $totalPanier - $cumul_tva;
 	}
 	?>
+	<?php if ($promoStatus['active']): ?>
+		<div class="promo-summary">
+			<span><i class="fa-solid fa-circle-check"></i> Code promo actif</span>
+			<strong>-1 € par article</strong>
+		</div>
+	<?php elseif (!$promoStatus['available']): ?>
+		<div class="promo-summary promo-unavailable">
+			<span><i class="fa-regular fa-clock"></i> <?php echo htmlspecialchars($promoStatus['message'], ENT_QUOTES, 'UTF-8'); ?></span>
+		</div>
+	<?php endif; ?>
 	<?php if(isset($_GET['paiement'])): ?>
 		<div class="row">
 
@@ -510,4 +537,3 @@
 		</div>
 	</div>
 </div>
-

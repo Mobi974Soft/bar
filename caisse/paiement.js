@@ -58,7 +58,7 @@ function printLastTicket(id_caisse){
         data: JSON.stringify({dernier_ticket: "true",  id_caisse: id_caisse}),
         success: function (data) {
             console.log(data)
-            var result = JSON.parse(data)
+			var result = typeof data === 'string' ? JSON.parse(data) : data
             if (result.response === 1) {
                 var cash = false
                 console.log(result.espece,result.espece>0)
@@ -1177,4 +1177,3 @@ function retourArticleDivers(session, idcaisse, event) {
         $('#erreurRetArticleDivers').text("Le champs prix ne peut pas être vide ! Veuillez entrez un prix.")
     }
 }
-

@@ -1,26 +1,27 @@
 ****************************************
-********XING FU TANG Saint-Pierre*******
+**************XING FU TANG**************
 ****************************************
-33 rue Marius et Ary Leblond
-97410 SAINT-PIERRE
+16 rue Saint-Vincent de Paul 
+Zone Industrielle de Bel Air 97450 Saint-Louis
 
-Telephone: 0262868682
-SIRET: 93039414300034
+Telephone: xxxxxx
+SIRET: 9874563211478
 
 Qte*PU      Designation       Mttc    TVA
 ------------------------------------------
-1*7.90  Passion Gourmet      7.90    2.10%
-700mL                          
-
+1*7.90  Bunny and Litchi     7.90   2.10%
+1*7.90  Milk Tea Tiramisu    7.90   2.10%
+1*7.90  Peach Gourmet        7.90   2.10%
+1*7.90  Mango Gourmet        7.90   2.10%
 
                                --------
-          TOTAL A PAYER TTC    8.90   EUR
-                   TOTAL HT    8.72   EUR
-                   TVA 2.1%    0.18   EUR
+          TOTAL A PAYER TTC    31.60  EUR
+                   TOTAL HT    30.95  EUR
+                   TVA 2.1%    0.65   EUR
 --------------------------------------
 
   Details du paiement:
-     > 8.90 EUR EN ESPECES
+     > 31.60 EUR EN ESPECES
 
  
     ECHANGE SOUS 48 HEURES - NON REMBOURSABLE
@@ -28,7 +29,7 @@ Qte*PU      Designation       Mttc    TVA
     
 -----------
 Caisse 2
-Numero de commande L493
+Numero de commande H058
 
   ======================================
-T2W1022 - 03/06/2026 18:37:43
+T2W1550 - 31/07/2026 16:45:56
