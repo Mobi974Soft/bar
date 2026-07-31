@@ -150,6 +150,10 @@ class PromoCode
                 }
             }
             self::writeJson(self::statePath($idCaisse, $idTable), $state, false);
+            // Le fichier journalier doit exister avant le premier encaissement.
+            // Ainsi, une promo ne peut pas être appliquée si son suivi n'est pas
+            // inscriptible sur cette installation.
+            self::initializeDailyReport();
             $conn->commit();
         } catch (Exception $e) {
             $conn->rollback();
@@ -282,6 +286,15 @@ class PromoCode
         return true;
     }
 
+    public static function initializeDailyReport(DateTimeImmutable $now = null)
+    {
+        $now = $now ?: self::now();
+        $date = $now->format('Y-m-d');
+        return self::mutateJson(self::dailyPath($date), function ($data) use ($date) {
+            return is_array($data) ? $data : self::emptyDailyReport($date);
+        });
+    }
+
     public static function dailySummary($date, $idCaisse = null)
     {
         $data = self::readJson(self::dailyPath($date));
@@ -391,7 +404,10 @@ class PromoCode
     {
         $directory = dirname($path);
         if (!is_dir($directory) && !mkdir($directory, 0775, true) && !is_dir($directory)) {
-            throw new RuntimeException('Impossible de créer le dossier JSON de la promotion.');
+            throw new RuntimeException('Impossible de créer le dossier JSON de la promotion : ' . $directory);
+        }
+        if (!is_writable($directory)) {
+            throw new RuntimeException('Le dossier JSON de la promotion n’est pas accessible en écriture : ' . $directory);
         }
     }
 
@@ -417,9 +433,12 @@ class PromoCode
         self::ensureDirectory($path);
         $handle = fopen($path, 'c+');
         if (!$handle) {
-            throw new RuntimeException('Impossible d’écrire le fichier JSON de la promotion.');
+            throw new RuntimeException('Impossible d’ouvrir le fichier JSON de la promotion : ' . $path);
         }
-        flock($handle, LOCK_EX);
+        if (!flock($handle, LOCK_EX)) {
+            fclose($handle);
+            throw new RuntimeException('Impossible de verrouiller le fichier JSON de la promotion : ' . $path);
+        }
         if ($merge) {
             rewind($handle);
             $existing = json_decode(stream_get_contents($handle), true);
@@ -429,7 +448,12 @@ class PromoCode
         }
         ftruncate($handle, 0);
         rewind($handle);
-        fwrite($handle, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if ($json === false || fwrite($handle, $json) !== strlen($json)) {
+            flock($handle, LOCK_UN);
+            fclose($handle);
+            throw new RuntimeException('Impossible d’enregistrer le fichier JSON de la promotion : ' . $path);
+        }
         fflush($handle);
         flock($handle, LOCK_UN);
         fclose($handle);
@@ -440,16 +464,24 @@ class PromoCode
         self::ensureDirectory($path);
         $handle = fopen($path, 'c+');
         if (!$handle) {
-            throw new RuntimeException('Impossible d’écrire le fichier JSON de la promotion.');
+            throw new RuntimeException('Impossible d’ouvrir le fichier JSON de la promotion : ' . $path);
         }
-        flock($handle, LOCK_EX);
+        if (!flock($handle, LOCK_EX)) {
+            fclose($handle);
+            throw new RuntimeException('Impossible de verrouiller le fichier JSON de la promotion : ' . $path);
+        }
         rewind($handle);
         $data = json_decode(stream_get_contents($handle), true);
         $data = $mutator(is_array($data) ? $data : null);
         if (is_array($data)) {
             ftruncate($handle, 0);
             rewind($handle);
-            fwrite($handle, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+            $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            if ($json === false || fwrite($handle, $json) !== strlen($json)) {
+                flock($handle, LOCK_UN);
+                fclose($handle);
+                throw new RuntimeException('Impossible d’enregistrer le fichier JSON de la promotion : ' . $path);
+            }
             fflush($handle);
         }
         flock($handle, LOCK_UN);
