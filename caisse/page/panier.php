@@ -66,6 +66,7 @@
 			<div class="col-3 promo-code-action">
 				<button type="button"
 					id="btnCodePromo"
+					data-id-table="<?php echo (int) $numerotable; ?>"
 					class="btn btn-block <?php echo $promoStatus['active'] ? 'btn-danger promo-active' : 'btn-promo'; ?>"
 					<?php echo $promoButtonDisabled ? 'disabled' : ''; ?>
 					title="<?php echo htmlspecialchars($promoStatus['message'], ENT_QUOTES, 'UTF-8'); ?>"
