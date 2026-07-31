@@ -175,12 +175,14 @@ if(isset($postdata)){
             }
         }
 	}elseif(isset($request->paiementDetails)){
-		$numerotable = 0;
-		$sql = "SELECT numero FROM restaurant_tables WHERE status = 1";
-        $table = $conn->query($sql);
-        if ($table->num_rows>0) {
-            $numerotable = $table->fetch_assoc()["numero"];
-        }
+		$numerotable = isset($request->id_table) ? max(0, (int) $request->id_table) : 0;
+		if (!isset($request->id_table)) {
+			$sql = "SELECT numero FROM restaurant_tables WHERE status = 1";
+			$table = $conn->query($sql);
+			if ($table && $table->num_rows > 0) {
+				$numerotable = (int) $table->fetch_assoc()["numero"];
+			}
+		}
         $resteApayer = $request->resteAPayer;
         $paiementDetails = $request->paiementDetails;
         $produitChoix = isset($request->produitChoix) ? $request->produitChoix : "";
@@ -326,10 +328,23 @@ if(isset($postdata)){
         }
         
         $panier = $conn->query($sql);
+        // Le paiement standard ne passe pas par la boucle "choixProduit".
+        // On calcule donc explicitement sa consommation promo avant l'encaissement.
+        if ($panier && $panier->num_rows > 0 && $infoTicket === "" && $promoState) {
+            while ($promoRow = $panier->fetch_assoc()) {
+                $promoItem = PromoCode::itemFromState($promoState, $promoRow['num']);
+                if ($promoItem) {
+                    $promoQte = max(0, (int) $promoRow['qte']);
+                    $promoProductCount += $promoQte;
+                    $promoDiscountTotal += (float) $promoItem['unit_discount'] * $promoQte;
+                }
+            }
+            $panier->data_seek(0);
+        }
         // var_dump($sql);
         
         
-        if ($panier->num_rows>0 && $infoTicket == "choixProduit") {
+        if ($panier && $panier->num_rows>0 && $infoTicket == "choixProduit") {
             $ticket_ligne = "";
             while($row = $panier->fetch_assoc()){
                 $num = $row['num'];
