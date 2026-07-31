@@ -202,6 +202,122 @@ hr.s5 {
 	border: 2px solid #ffc107;
 }
 
+/* Rafraîchissement visuel de la caisse : mêmes repères, meilleure lisibilité tactile. */
+:root {
+	--pos-primary: #4f46e5;
+	--pos-primary-dark: #3730a3;
+	--pos-accent: #7c3aed;
+	--pos-surface: #ffffff;
+	--pos-background: #f3f5f9;
+	--pos-text: #172033;
+	--pos-muted: #667085;
+	--pos-radius: 14px;
+	--pos-shadow: 0 8px 24px rgba(23, 32, 51, 0.08);
+}
+
+html, body {
+	background: var(--pos-background);
+	color: var(--pos-text);
+	font-family: Inter, "Segoe UI", Tahoma, sans-serif;
+}
+
+.bg-dark {
+	background: linear-gradient(180deg, #232946 0%, #121629 100%) !important;
+}
+
+.card,
+.callout,
+.box-cat,
+.small-box {
+	border: 0;
+	border-radius: var(--pos-radius);
+	box-shadow: var(--pos-shadow);
+}
+
+.card.produit {
+	margin-bottom: 10px;
+	border: 1px solid #e8eaf0;
+	transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.card.produit:hover {
+	border-color: #c7d2fe;
+	transform: translateY(-1px);
+}
+
+.panierTitle {
+	align-items: center;
+	background: rgba(255, 255, 255, 0.96);
+	border-bottom: 1px solid #e8eaf0;
+	margin-top: 0;
+	padding: 12px 4px;
+}
+
+.panierTitle .btn {
+	min-height: 44px;
+	border: 0;
+	border-radius: 10px;
+	font-weight: 700;
+}
+
+.btn-promo {
+	background: linear-gradient(135deg, var(--pos-primary), var(--pos-accent));
+	color: #fff;
+	box-shadow: 0 6px 14px rgba(79, 70, 229, 0.28);
+}
+
+.btn-promo:hover,
+.btn-promo:focus {
+	background: linear-gradient(135deg, var(--pos-primary-dark), #6d28d9);
+	color: #fff;
+}
+
+.btn-promo:disabled {
+	background: #d0d5dd;
+	box-shadow: none;
+}
+
+.promo-active {
+	box-shadow: 0 6px 14px rgba(220, 53, 69, 0.22);
+}
+
+.promo-line {
+	color: var(--pos-accent);
+	font-size: 13px;
+	font-weight: 700;
+	margin: 3px 0 0;
+}
+
+.promo-summary {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 8px 10px 0;
+	padding: 10px 12px;
+	background: #eef2ff;
+	border: 1px solid #c7d2fe;
+	border-radius: 10px;
+	color: var(--pos-primary-dark);
+}
+
+.promo-unavailable {
+	background: #f8fafc;
+	border-color: #e2e8f0;
+	color: var(--pos-muted);
+	font-size: 13px;
+}
+
+#paiementBlock .small-box.bg-success {
+	background: linear-gradient(135deg, #059669, #10b981) !important;
+}
+
+.btnPaiementPage {
+	min-height: 54px;
+	border: 0;
+	border-radius: 12px;
+	box-shadow: 0 6px 16px rgba(23, 32, 51, 0.14);
+}
+
 
 /* Couleurs des fruits */
 .fruit-litchi {
