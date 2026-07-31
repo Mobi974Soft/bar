@@ -1,17 +1,17 @@
 
         CAISSE 2
-        DATE : 31/07/2026 16:08:40
+        DATE : 31/07/2026 16:46:00
 
         -----------------------------
 
-        TOTAL ESPECE : 0.00 EUR (0)
-        TOTAL CB : 126.30 EUR (6)
+        TOTAL ESPECE : 60.20 EUR (2)
+        TOTAL CB : 211.10 EUR (12)
         TOTAL CHEQUE: 0.00 EUR (0)
         
 
         -----------------------------
 
-        TOTAL TTC : 126.30 EUR
+        TOTAL TTC : 271.30 EUR
 
 -----------------------------
 

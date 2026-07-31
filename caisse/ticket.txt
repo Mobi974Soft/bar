@@ -9,19 +9,19 @@ SIRET: 9874563211478
 
 Qte*PU      Designation       Mttc    TVA
 ------------------------------------------
+1*7.90  Bunny and Litchi     7.90   2.10%
 1*7.90  Milk Tea Tiramisu    7.90   2.10%
-            Remise    -1.00  
 1*7.90  Peach Gourmet        7.90   2.10%
-            Remise    -1.00  
+1*7.90  Mango Gourmet        7.90   2.10%
 
                                --------
-          TOTAL A PAYER TTC    13.80  EUR
-                   TOTAL HT    13.52  EUR
-                   TVA 2.1%    0.28   EUR
+          TOTAL A PAYER TTC    31.60  EUR
+                   TOTAL HT    30.95  EUR
+                   TVA 2.1%    0.65   EUR
 --------------------------------------
 
   Details du paiement:
-     > 13.80 EUR EN CB
+     > 31.60 EUR EN ESPECES
 
  
     ECHANGE SOUS 48 HEURES - NON REMBOURSABLE
@@ -29,7 +29,7 @@ Qte*PU      Designation       Mttc    TVA
     
 -----------
 Caisse 2
-Numero de commande G262
+Numero de commande H058
 
   ======================================
-T2W1542 - 31/07/2026 16:08:36
+T2W1550 - 31/07/2026 16:45:56
