@@ -3,6 +3,45 @@ const modal_body_cheque = $('#modal-body-cheque').html();
 const modal_body_cb = $('#modal-body-cb').html();
 const modal_body_espece = $('#modal-body-espece').html();
 
+function togglePromoCode(idCaisse, idTable, active) {
+	var action = active ? 'undo' : 'apply';
+	var title = active ? 'Retirer le code promo ?' : 'Appliquer le code promo ?';
+	var text = active
+		? 'Les prix initiaux seront restaurés sur ce panier.'
+		: 'Une remise de 1 € sera appliquée à chaque article du panier. Un seul code promo est autorisé par panier.';
+
+	Swal.fire({
+		title: title,
+		text: text,
+		icon: 'question',
+		showCancelButton: true,
+		confirmButtonText: active ? 'Oui, retirer' : 'Oui, appliquer',
+		cancelButtonText: 'Annuler',
+		confirmButtonColor: active ? '#dc3545' : '#6c5ce7'
+	}).then(function (result) {
+		if (!result.isConfirmed) {
+			return;
+		}
+
+		$('#btnCodePromo').prop('disabled', true);
+		$.ajax({
+			url: 'promo-code.php',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify({ action: action, id_caisse: idCaisse, id_table: idTable }),
+			success: function (response) {
+				Toast.fire({ icon: 'success', title: response.message });
+				window.location.reload();
+			},
+			error: function (xhr) {
+				var response = xhr.responseJSON || {};
+				Toast.fire({ icon: 'error', title: response.message || 'Impossible de modifier le code promo.' });
+				$('#btnCodePromo').prop('disabled', false);
+			}
+		});
+	});
+}
+
 $('#showRemisePourcent').click(function(e){
     $('#remise-globale').show()
     $('#remise-globale-euro').hide()
@@ -536,13 +575,15 @@ function totalCaisse(id_caisse, options = null) {
                 }),
                 success: function (data) {
                     console.log(data)
-                    var result = JSON.parse(data)
-                    if (result.response === 1) {
-                        Toast.fire({
-                            icon: 'success',
-                            title: "Ticket du total caisse imprimé !"
-                        })
-                    }
+					var result = typeof data === 'string' ? JSON.parse(data) : data
+					if (result.response === 1) {
+						Toast.fire({
+							icon: 'success',
+							title: "Ticket du total caisse imprimé !"
+						})
+					} else {
+						Toast.fire({ icon: 'error', title: result.message || 'Impression impossible' })
+					}
                 }
             })
         // }
@@ -3381,14 +3422,14 @@ function addProduitDiversSimple( idcaisse,qte) {
 
 
 					
-					}else if(result.response === 2){
-						
-						var newQte = result.data;
-						$("#totalPanier").load(location.href + " #totalPanier");
-						$('#quantiteProduit-'+result.message).val(newQte);
-						$('#qteLigne-'+ref).text(prix.toFixed(2)+"€ x"+newQte)
+						}else if(result.response === 2){
+							var newQte = result.data;
+							$("#totalPanier").load(location.href + " #totalPanier");
+							$('#quantiteProduit-'+result.message).val(newQte);
+							$('#qteLigne-'+ref).text(prix.toFixed(2)+"€ x"+newQte)
+						}
+						$("#panierContent").load(location.href + " #panierContent>*");
 					}
-				}
 			})
 		}
 		function offrirArticle(titre,id_caisse,num){
