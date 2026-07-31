@@ -11,3 +11,7 @@ ticket_total_caisse.txt
 /journaux/
 /garde/
 /lib/
+ticket_total_caisse.txt
+ticket.txt
+caisse/ticket.txt
+caisse/commande.txt

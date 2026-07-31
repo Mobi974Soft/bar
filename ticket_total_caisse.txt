@@ -1,18 +1,24 @@
 
-        CAISSE 1
-        DATE : 2026-04-22 17:30:37
+        CAISSE 2
+        DATE : 31/07/2026 16:08:40
 
         -----------------------------
 
-        TOTAL ESPECE : 408.80 EUR (28)
-        TOTAL CB : 395.20 EUR (36)
+        TOTAL ESPECE : 0.00 EUR (0)
+        TOTAL CB : 126.30 EUR (6)
         TOTAL CHEQUE: 0.00 EUR (0)
         
-        
-        -----------------------------
-        
-        
-        TOTAL TTC : 804.00 EUR
 
-        
-        
+        -----------------------------
+
+        TOTAL TTC : 126.30 EUR
+
+-----------------------------
+
+        CODE PROMO -1 EUR :
+
+        TICKETS : 0
+        PRODUITS : 0
+        REMISE : 0.00 EUR
+
+

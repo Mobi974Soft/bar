@@ -3,8 +3,19 @@ GAP 2mm, 0mm
 DIRECTION 1
 REFERENCE 0,0
 CLS
-TEXT 10,15,"3" ,0,1,1,"L493 - 700mL [1]"
-TEXT 10,45,"3",0,1,1,"Passion Gourmet"
+TEXT 10,15,"3" ,0,1,1,"G262 - 500mL [2]"
+TEXT 10,45,"3",0,1,1,"Milk Tea Tiramisu"
+BAR 0,70,800,2 
+PRINT 1
+
+
+SIZE 50 mm, 25 mm
+GAP 2mm, 0mm
+DIRECTION 1
+REFERENCE 0,0
+CLS
+TEXT 10,15,"3" ,0,1,1,"G262 - 500mL [2]"
+TEXT 10,45,"3",0,1,1,"Peach Gourmet"
 BAR 0,70,800,2 
 PRINT 1
 

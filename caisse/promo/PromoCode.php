@@ -14,7 +14,7 @@ class PromoCode
     const UNIT_AMOUNT = 1.00;
 
     // Période métier à modifier ici si les dates définitives changent.
-    const START_AT = '2026-08-01 00:00:00';
+    const START_AT = '2026-07-31 00:00:00';
     const END_AT = '2026-08-31 23:59:59';
 
     public static function timezone()
