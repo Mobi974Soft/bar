@@ -8,6 +8,7 @@ header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 header('Access-Control-Max-Age: 1000');
 header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
 include '../DBConfig.php';
+require_once __DIR__ . '/promo/PromoCode.php';
 if (PHP_OS_FAMILY=="Windows") {
    require("C:/xampp/htdocs/caisse-backend/bar/tickets/print-ticket.php");
 }else{
@@ -137,6 +138,7 @@ if(isset($postdata)){
         $query = $conn->query($sql);
         if ($query) {
             $last_id = $conn->insert_id;
+            PromoCode::applyToCartRow($conn, $id_caisse, $idtable, $last_id);
             $produit = $conn->query("SELECT * FROM table_client_panier WHERE num = $last_id ");
             
             $produit = $produit->fetch_assoc();
@@ -172,8 +174,9 @@ if(isset($postdata)){
                 echo errorResponse("Non",2);
             }
         }
-    }elseif(isset($request->paiementDetails)){
-        $sql = "SELECT numero FROM restaurant_tables WHERE status = 1";
+	}elseif(isset($request->paiementDetails)){
+		$numerotable = 0;
+		$sql = "SELECT numero FROM restaurant_tables WHERE status = 1";
         $table = $conn->query($sql);
         if ($table->num_rows>0) {
             $numerotable = $table->fetch_assoc()["numero"];
@@ -183,6 +186,10 @@ if(isset($postdata)){
         $produitChoix = isset($request->produitChoix) ? $request->produitChoix : "";
         $infoTicket = $request->infoTicket;
         $id_caisse = $request->id_caisse;
+		$promoState = PromoCode::getState($id_caisse, $numerotable);
+		$promoProductCount = 0;
+		$promoDiscountTotal = 0;
+		$promoTrackingWarning = '';
         $espece = 0;
         $cb = 0;
         $cheque = 0;
@@ -293,7 +300,7 @@ if(isset($postdata)){
                 $famille = $row['famille'];
                 $date = date('Y-m-d',$row['date']);
                 $qte = $row['qte'];
-                $remise_euro = 0;
+				$remise_euro = (float) $row['remise_euro'];
                 $remise_pourcent = $row['remise'];
                 $qte_total+=$qte;
                 $id_table = $row['idtable'];
@@ -301,8 +308,15 @@ if(isset($postdata)){
                 $titre = $row['titre'];
                 $statut = $row['statut'];
                 // Remplissage pour la table commandes
-                $commandes[] = (object) array('id_caisse' => $id_caisse, 'pu_euro' => $pu_euro , 'idproduit' => $idproduit, 'qte' => $qte, 'remise' => 0,  'taux_tva' => $taux_tva, 'famille' => $famille, 'promo' => $promo, 'id_table' => $id_table, 'statut' => 0,'date' => $date );
-                $total_euro_du += $promo > 0 ? ($promo - ($promo * ($remise_pourcent/100))) * $qte :  ($pu_euro - ($pu_euro * ($remise_pourcent/100))) * $qte;
+				$basePrice = $promo > 0 ? $promo : $pu_euro;
+				$netUnitPrice = max(0, $basePrice - ($basePrice * ($remise_pourcent / 100)) - $remise_euro);
+				$commandes[] = (object) array('id_caisse' => $id_caisse, 'pu_euro' => $pu_euro , 'idproduit' => $idproduit, 'qte' => $qte, 'remise' => $remise_euro * $qte,  'taux_tva' => $taux_tva, 'famille' => $famille, 'promo' => $promo, 'id_table' => $id_table, 'statut' => 0,'date' => $date );
+				$total_euro_du += $netUnitPrice * $qte;
+				$promoItem = PromoCode::itemFromState($promoState, $num);
+				if ($promoItem) {
+					$promoProductCount += $qte;
+					$promoDiscountTotal += (float) $promoItem['unit_discount'] * $qte;
+				}
                 // $paidProduct = $conn->query("UPDATE table_client_panier SET statut = 1 WHERE num = $num");
             }
 
@@ -328,7 +342,7 @@ if(isset($postdata)){
                 $famille = $row['famille'];
                 $date = date('Y-m-d',$row['date']);
                 
-                $remise_euro = 0;
+				$remise_euro = (float) $row['remise_euro'];
                 $remise_pourcent = $row['remise'];
                 
                 $id_table = $row['idtable'];
@@ -349,32 +363,22 @@ if(isset($postdata)){
                 }
                 
                 $qte_total+=$qte;
-                // CALCUL TAUX TVA
-                if ($taux_tva == 8.5) {
-                    if ($promo > 0) {
-                        $totalTVA8 += ($promo -($promo / (1+$taux_tva/100))) * $qte;
-                    }else{
-                        $totalTVA8 += ($pu_euro -($pu_euro / (1+$taux_tva/100))) * $qte;
-                    }
-                }elseif($taux_tva == 2.1){
-                    if ($promo > 0) {
-                        $totalTVA2 += ($promo -($promo / (1+$taux_tva/100))) * $qte;
-                    }else{
-                        $totalTVA2 += ($pu_euro -($pu_euro / (1+$taux_tva/100))) * $qte;
-                    }
-                }
-                elseif($taux_tva == 1.05){
-                    if ($promo > 0) {
-                        $totalTVA1 += ($promo -($promo / (1+$taux_tva/100))) * $qte;
-                    }else{
-                        $totalTVA1 += ($pu_euro -($pu_euro / (1+$taux_tva/100))) * $qte;
-                    }
-                }
+				$basePrice = $promo > 0 ? $promo : $pu_euro;
+				$netUnitPrice = max(0, $basePrice - ($basePrice * ($remise_pourcent / 100)) - $remise_euro);
+				// CALCUL TAUX TVA
+				if ($taux_tva == 8.5) {
+					$totalTVA8 += ($netUnitPrice - ($netUnitPrice / (1 + $taux_tva / 100))) * $qte;
+				}elseif($taux_tva == 2.1){
+					$totalTVA2 += ($netUnitPrice - ($netUnitPrice / (1 + $taux_tva / 100))) * $qte;
+				}
+				elseif($taux_tva == 1.05){
+					$totalTVA1 += ($netUnitPrice - ($netUnitPrice / (1 + $taux_tva / 100))) * $qte;
+				}
                 // FIN CACUL TAUX TVA
                 // GENERATION DES LIGNES DU TICKET 
-                $prix_total = $pu_euro * $qte;
-                $ligne_ticket = setStringLen($titre, $designiation_limit);
-                $ligne_qte = setStringLen($qte . "*" . $pu_euro, $qte_prix_limit);
+				$prix_total = $netUnitPrice * $qte;
+				$ligne_ticket = setStringLen($titre, $designiation_limit);
+				$ligne_qte = setStringLen($qte . "*" . formatNumber($netUnitPrice), $qte_prix_limit);
                 $ligne_tva = setStringLen($taux_tva, $tva_limit);
                 $ligne_prix_commande = setStringLen(formatNumber($prix_total), $mttc_limit, true);
                 $ticket_ligne .= $ligne_qte . $ligne_ticket . "  " .$ligne_prix_commande . " " . $ligne_tva. "\n";
@@ -383,9 +387,15 @@ if(isset($postdata)){
                     $ticket_ligne .= str_repeat(" ",12).setStringLen("Remise",9)." ";
                 }
                 // FIN GENERATION DU TICKET 
-                $commandes[] = (object) array('id_caisse' => $id_caisse, 'pu_euro' => $pu_euro , 'idproduit' => $idproduit, 'qte' => $qte, 'remise' => 0,  'taux_tva' => $taux_tva, 'famille' => $famille, 'promo' => $promo, 'id_table' => $id_table, 'statut' => 0,'date' => $date );
-                // var_dump($pu_euro."*".$qte);
-                $total_euro_du += $promo > 0 ? ($promo - ($promo * ($remise_pourcent/100))) * $qte :  ($pu_euro - ($pu_euro * ($remise_pourcent/100))) * $qte;
+				$commandes[] = (object) array('id_caisse' => $id_caisse, 'pu_euro' => $pu_euro , 'idproduit' => $idproduit, 'qte' => $qte, 'remise' => $remise_euro * $qte,  'taux_tva' => $taux_tva, 'famille' => $famille, 'promo' => $promo, 'id_table' => $id_table, 'statut' => 0,'date' => $date );
+				// var_dump($pu_euro."*".$qte);
+				$total_euro_du += $netUnitPrice * $qte;
+				$promoItem = PromoCode::itemFromState($promoState, $num);
+				if ($promoItem) {
+					$promoProductCount += $qte;
+					$promoDiscountTotal += (float) $promoItem['unit_discount'] * $qte;
+					$ticket_ligne .= str_repeat(' ', 4) . 'CODE PROMO -' . formatNumber((float) $promoItem['unit_discount'] * $qte) . " EUR\n";
+				}
             }
         }
 
@@ -474,7 +484,7 @@ if(isset($postdata)){
             if ($updateTicket) {
                 $updateClient = $conn->query( "UPDATE clients SET statut = 0 AND idtable = 0 WHERE idtable = $numerotable");
                 $deletePaiement = $conn->query("DELETE FROM paiement_quantite  WHERE `table` = $numerotable");
-                foreach($commandes as $commande){
+				foreach($commandes as $commande){
                     $idproduit = $commande->idproduit;
                     $qte = $commande->qte;
                     $pu_euro = $commande->pu_euro;
@@ -486,14 +496,28 @@ if(isset($postdata)){
                     $sql = "INSERT INTO `table_client_commandes`(`id_ticket`, `id_caisse`, `id_produit`, `qte`,`pu_euro`, `promo`, `remise`, `taux_tva`, `famille`,`date`, `sendserveur`) 
                     VALUES ($lastID,$id_caisse,'$idproduit',$qte,$pu_euro,$promo,$remise,$taux_tva,$famille,'$date',1)";
                     
-                    $newCommandes = $conn->query($sql);
-                }
-                $total = calculTotal($conn,1,$id_caisse);
+					$newCommandes = $conn->query($sql);
+				}
+				if ($promoProductCount > 0 && $promoDiscountTotal > 0) {
+					try {
+						PromoCode::recordUsage(
+							$lastID,
+							$id_caisse,
+							$numerotable,
+							$promoProductCount,
+							$promoDiscountTotal
+						);
+					} catch (Exception $e) {
+						$promoTrackingWarning = 'Le ticket est encaissé, mais la trace JSON de la promo a échoué.';
+						error_log($promoTrackingWarning . ' Ticket ' . $lastID . ' : ' . $e->getMessage());
+					}
+				}
+				$total = calculTotal($conn,1,$id_caisse);
 
                 if ($resteApayer > 0 && $total[0] < $total_euro) {
-                    echo json_encode(array('response' => 1, 'ticket' => $ticket, 'arendre' => $monnaieArendre, 'clear' => false , 'table' => $numerotable));
-                }else{
-                    echo json_encode(array('response' => 1, 'ticket' => $ticket, 'arendre' => $monnaieArendre, 'clear' => true,'table' => $numerotable));
+					echo json_encode(array('response' => 1, 'ticket' => $ticket, 'arendre' => $monnaieArendre, 'clear' => false , 'table' => $numerotable, 'warning' => $promoTrackingWarning));
+				}else{
+					echo json_encode(array('response' => 1, 'ticket' => $ticket, 'arendre' => $monnaieArendre, 'clear' => true,'table' => $numerotable, 'warning' => $promoTrackingWarning));
                 }
 
 
