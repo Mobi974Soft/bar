@@ -190,7 +190,10 @@ if(isset($postdata)){
         $resteApayer = $request->resteAPayer;
         $paiementDetails = $request->paiementDetails;
         $produitChoix = isset($request->produitChoix) ? $request->produitChoix : "";
-        $infoTicket = $request->infoTicket;
+        // JSON.stringify omet les propriétés JavaScript à undefined. Un paiement
+        // standard arrive donc parfois sans infoTicket : on le normalise ici afin
+        // que son panier passe bien dans le calcul des statistiques promo.
+        $infoTicket = isset($request->infoTicket) ? (string) $request->infoTicket : '';
         $id_caisse = $request->id_caisse;
 		$promoState = PromoCode::getState($id_caisse, $numerotable);
 		// Repli serveur si l'identifiant envoyé par l'interface est périmé.
@@ -204,6 +207,7 @@ if(isset($postdata)){
 		$promoProductCount = 0;
 		$promoDiscountTotal = 0;
 		$promoTrackingWarning = '';
+		$shouldClearCart = false;
         $espece = 0;
         $cb = 0;
         $cheque = 0;
@@ -429,6 +433,13 @@ if(isset($postdata)){
 
         $ticket ="";
         $total_euro += (float)$espece + (float)$cb + (float)$chequeRestaurant + (float)$cheque;
+		// En paiement standard, resteAPayer contient le solde avant cet encaissement.
+		// Le serveur peut donc confirmer la fin du panier sans dépendre des valeurs
+		// recalculées dans le navigateur. Les paiements par produits / fractionnés
+		// conservent volontairement l'état promo pour les tickets suivants.
+		if ($infoTicket === '') {
+			$shouldClearCart = $total_euro + 0.005 >= (float) $resteApayer;
+		}
         // var_dump($total_euro,$total_euro_du);
         $monnaieArendre = $total_euro > $total_euro_du ? $total_euro - $total_euro_du : 0;
         // var_dump($monnaieArendre);die();
@@ -535,13 +546,16 @@ if(isset($postdata)){
 							$promoDiscountTotal
 						);
 					} catch (Exception $e) {
-						$promoTrackingWarning = 'Le ticket est encaissé, mais la trace JSON de la promo a échoué.';
+						$promoTrackingWarning = 'Le ticket est encaissé, mais la trace JSON de la promo a échoué : ' . $e->getMessage();
 						error_log($promoTrackingWarning . ' Ticket ' . $lastID . ' : ' . $e->getMessage());
 					}
 				}
+				if ($shouldClearCart && $promoTrackingWarning === '' && !PromoCode::clearState($id_caisse, $numerotable)) {
+					$promoTrackingWarning = 'Le ticket est encaissé, mais l’état du bouton promo n’a pas pu être réinitialisé.';
+				}
 				$total = calculTotal($conn,1,$id_caisse);
 
-                if ($resteApayer > 0 && $total[0] < $total_euro) {
+				if (!$shouldClearCart) {
 					echo json_encode(array('response' => 1, 'ticket' => $ticket, 'arendre' => $monnaieArendre, 'clear' => false , 'table' => $numerotable, 'warning' => $promoTrackingWarning));
 				}else{
 					echo json_encode(array('response' => 1, 'ticket' => $ticket, 'arendre' => $monnaieArendre, 'clear' => true,'table' => $numerotable, 'warning' => $promoTrackingWarning));
