@@ -42,6 +42,23 @@ function togglePromoCode(idCaisse, idTable, active) {
 	});
 }
 
+function resetPromoCodeButton(idCaisse, idTable) {
+	var button = $('#btnCodePromo');
+	if (!button.length) {
+		return;
+	}
+
+	button
+		.removeClass('btn-danger promo-active')
+		.addClass('btn-promo')
+		.prop('disabled', false)
+		.attr('title', '')
+		.attr('data-id-table', idTable)
+		.attr('onclick', "togglePromoCode('" + idCaisse + "','" + idTable + "',false)")
+		.html('<i class="fa-solid fa-tag"></i> Code promo');
+	$('.promo-summary').remove();
+}
+
 $('#showRemisePourcent').click(function(e){
     $('#remise-globale').show()
     $('#remise-globale-euro').hide()
@@ -2818,6 +2835,9 @@ function pay(id_caisse,multiple=false,element=null){
 							console.log("ARGENT A RENDRE=>"+argentArendre)
 							$('#monnaieArendre').text(argentArendre.toFixed(2) + " €")
 						}
+						// La page restaurant reste ouverte après l'encaissement : on remet
+						// donc le bouton à son état initial sans attendre un rechargement.
+						resetPromoCodeButton(id_caisse, res.table)
 						clearPanier(id_caisse,rendu,res.table)
 						$('#paiementBoard').css('display','none')
 					}
