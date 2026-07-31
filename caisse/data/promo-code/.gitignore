@@ -1,0 +1,4 @@
+*.json
+active/*.json
+!.gitignore
+!active/.gitignore
