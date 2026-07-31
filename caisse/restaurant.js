@@ -2718,6 +2718,7 @@ function pay(id_caisse,multiple=false,element=null){
 			data: JSON.stringify({
 				paiementDetails: newArray,
 				id_caisse:id_caisse,
+				id_table:parseInt($('#btnCodePromo').attr('data-id-table'), 10) || 0,
 				multiple:multiple,
 				resteAPayer:resteAPayer,
 				produitChoix:arrProduit,
@@ -2727,6 +2728,9 @@ function pay(id_caisse,multiple=false,element=null){
 				// console.log(response)
 				
 				var res = JSON.parse(response)
+				if (res.warning) {
+					Toast.fire({ icon: 'warning', title: res.warning })
+				}
 				if (res.response == 1) {
 					// $('#totalPanier').text("0.00 €")
 					console.log("table=>"+res.arendre)
