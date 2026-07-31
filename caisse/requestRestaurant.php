@@ -175,7 +175,14 @@ if(isset($postdata)){
             }
         }
 	}elseif(isset($request->paiementDetails)){
-		$numerotable = isset($request->id_table) ? max(0, (int) $request->id_table) : 0;
+		$id_caisse = (int) $request->id_caisse;
+		$requestedTableNumber = isset($request->id_table) ? max(0, (int) $request->id_table) : 0;
+		$numerotable = $requestedTableNumber;
+		$promoStateTable = $requestedTableNumber;
+		// Chercher d'abord exactement l'état indiqué par le bouton. En particulier,
+		// une promo appliquée au panier 0 ne doit pas être perdue si une table de
+		// restaurant est encore marquée active au moment du paiement.
+		$promoState = PromoCode::getState($id_caisse, $promoStateTable);
 		$activeTableNumber = 0;
 		$sql = "SELECT numero FROM restaurant_tables WHERE status = 1";
 		$table = $conn->query($sql);
@@ -194,13 +201,11 @@ if(isset($postdata)){
         // standard arrive donc parfois sans infoTicket : on le normalise ici afin
         // que son panier passe bien dans le calcul des statistiques promo.
         $infoTicket = isset($request->infoTicket) ? (string) $request->infoTicket : '';
-        $id_caisse = $request->id_caisse;
-		$promoState = PromoCode::getState($id_caisse, $numerotable);
 		// Repli serveur si l'identifiant envoyé par l'interface est périmé.
-		if (!$promoState && $activeTableNumber > 0 && $activeTableNumber !== $numerotable) {
+		if (!$promoState && $activeTableNumber > 0 && $activeTableNumber !== $promoStateTable) {
 			$activePromoState = PromoCode::getState($id_caisse, $activeTableNumber);
 			if ($activePromoState) {
-				$numerotable = $activeTableNumber;
+				$promoStateTable = $activeTableNumber;
 				$promoState = $activePromoState;
 			}
 		}
@@ -560,7 +565,7 @@ if(isset($postdata)){
 						$promoRecorded = PromoCode::recordUsage(
 							$lastID,
 							$id_caisse,
-							$numerotable,
+							$promoStateTable,
 							$promoProductCount,
 							$promoDiscountTotal
 						);
@@ -573,7 +578,7 @@ if(isset($postdata)){
 					$promoTrackingWarning = 'Le ticket est encaissé, mais aucune statistique promo n’a pu être calculée.';
 					error_log($promoTrackingWarning . ' Ticket ' . $lastID . '.');
 				}
-				if ($shouldClearCart && $promoTrackingWarning === '' && !PromoCode::clearState($id_caisse, $numerotable)) {
+				if ($shouldClearCart && $promoTrackingWarning === '' && !PromoCode::clearState($id_caisse, $promoStateTable)) {
 					$promoTrackingWarning = 'Le ticket est encaissé, mais l’état du bouton promo n’a pas pu être réinitialisé.';
 				}
 				$total = calculTotal($conn,1,$id_caisse);
