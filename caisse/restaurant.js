@@ -2600,6 +2600,10 @@ function newProduitPrice(ref,id_caisse){
 function pay(id_caisse,multiple=false,element=null){
 	
 	var nbProduitCocher = $('input[name="produitChoix[]"]:checked').length;
+	// Mémoriser le type d'encaissement avant que le code historique ne coche
+	// automatiquement toutes les lignes. Sinon un paiement du panier complet est
+	// envoyé au serveur comme un paiement partiel "choixProduit".
+	var fullCartPayment = nbProduitCocher === 0 && !multiple;
 	var paiementShared = false;
 
 	if($('.inputMontantPaiement').val()==0 && nbProduitCocher == 0){
@@ -2738,6 +2742,7 @@ function pay(id_caisse,multiple=false,element=null){
 				id_caisse:id_caisse,
 				id_table:parseInt($('#btnCodePromo').attr('data-id-table'), 10) || 0,
 				multiple:multiple,
+				full_cart:fullCartPayment,
 				resteAPayer:resteAPayer,
 				produitChoix:arrProduit,
 				infoTicket:infoTicket,
