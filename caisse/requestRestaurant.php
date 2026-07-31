@@ -440,6 +440,24 @@ if(isset($postdata)){
 		if ($infoTicket === '') {
 			$shouldClearCart = $total_euro + 0.005 >= (float) $resteApayer;
 		}
+		// Si les identifiants de lignes du panier ont changé entre l'application
+		// de la promo et l'encaissement, le rapprochement détaillé ci-dessus peut
+		// ne rien trouver. Pour un encaissement complet et encore non tracé, les
+		// totaux mémorisés lors de l'application constituent alors le repli fiable.
+		if (
+			$shouldClearCart
+			&& $promoState
+			&& $promoProductCount === 0
+			&& $promoDiscountTotal <= 0
+			&& empty($promoState['used_ticket_ids'])
+		) {
+			$promoProductCount = isset($promoState['product_count_at_apply'])
+				? max(0, (int) $promoState['product_count_at_apply'])
+				: 0;
+			$promoDiscountTotal = isset($promoState['discount_at_apply'])
+				? max(0, (float) $promoState['discount_at_apply'])
+				: 0;
+		}
         // var_dump($total_euro,$total_euro_du);
         $monnaieArendre = $total_euro > $total_euro_du ? $total_euro - $total_euro_du : 0;
         // var_dump($monnaieArendre);die();
@@ -536,9 +554,10 @@ if(isset($postdata)){
                     
 					$newCommandes = $conn->query($sql);
 				}
+				$promoRecorded = false;
 				if ($promoProductCount > 0 && $promoDiscountTotal > 0) {
 					try {
-						PromoCode::recordUsage(
+						$promoRecorded = PromoCode::recordUsage(
 							$lastID,
 							$id_caisse,
 							$numerotable,
@@ -550,15 +569,19 @@ if(isset($postdata)){
 						error_log($promoTrackingWarning . ' Ticket ' . $lastID . ' : ' . $e->getMessage());
 					}
 				}
+				if ($promoState && empty($promoState['used_ticket_ids']) && !$promoRecorded && $promoTrackingWarning === '') {
+					$promoTrackingWarning = 'Le ticket est encaissé, mais aucune statistique promo n’a pu être calculée.';
+					error_log($promoTrackingWarning . ' Ticket ' . $lastID . '.');
+				}
 				if ($shouldClearCart && $promoTrackingWarning === '' && !PromoCode::clearState($id_caisse, $numerotable)) {
 					$promoTrackingWarning = 'Le ticket est encaissé, mais l’état du bouton promo n’a pas pu être réinitialisé.';
 				}
 				$total = calculTotal($conn,1,$id_caisse);
 
 				if (!$shouldClearCart) {
-					echo json_encode(array('response' => 1, 'ticket' => $ticket, 'arendre' => $monnaieArendre, 'clear' => false , 'table' => $numerotable, 'warning' => $promoTrackingWarning));
+					echo json_encode(array('response' => 1, 'ticket' => $ticket, 'arendre' => $monnaieArendre, 'clear' => false , 'table' => $numerotable, 'promo_recorded' => $promoRecorded, 'warning' => $promoTrackingWarning));
 				}else{
-					echo json_encode(array('response' => 1, 'ticket' => $ticket, 'arendre' => $monnaieArendre, 'clear' => true,'table' => $numerotable, 'warning' => $promoTrackingWarning));
+					echo json_encode(array('response' => 1, 'ticket' => $ticket, 'arendre' => $monnaieArendre, 'clear' => true,'table' => $numerotable, 'promo_recorded' => $promoRecorded, 'warning' => $promoTrackingWarning));
                 }
 
 
